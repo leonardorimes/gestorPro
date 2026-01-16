@@ -1,22 +1,38 @@
+"use server";
+
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
 export async function registerUser(formData: FormData) {
   const email = formData.get("email") as string;
-  const user = formData.get("username");
+  const user = formData.get("user") as string;
   const password = formData.get("password") as string;
 
-  if (!email || !password) {
-    throw new Error("Dados Inválidos");
+  const userExists = await prisma.user.findUnique({
+    where: { email: email },
+  });
+
+  if (userExists) {
+    throw new Error("Usuário já existe");
   }
 
-  const hashedPassord = await bcrypt.hash(password, 10);
+  try {
+    if (!email || !password) {
+      throw new Error("Dados Inválidos");
+    }
 
-  await prisma.user.create({
-    data: {
-      email,
-      username: user,
-      password: hashedPassord,
-    },
-  });
+    const hashedPassord = await bcrypt.hash(password, 10);
+
+    console.log(email, user, hashedPassord);
+
+    await prisma.user.create({
+      data: {
+        email,
+        username: user,
+        password: hashedPassord,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
 }

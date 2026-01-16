@@ -1,7 +1,12 @@
+import { registerUser } from "../actions/auth";
+
 export default function LoginForm() {
   return (
     <div className="flex flex-col items-center justify-center gap-5 min-h-screen">
-      <form className="flex flex-col items-center gap-16  " action="">
+      <form
+        className="flex flex-col items-center gap-16  "
+        action={registerUser}
+      >
         <img className="w-xl" src="./logo.png" alt="" />
         <label className="flex items-center gap-4">
           Email:
@@ -9,6 +14,7 @@ export default function LoginForm() {
             id="emailSignin"
             type="text"
             className="bg-gray-200 w-100 border border-[#169545] outline-none  rounded-md"
+            name="email"
           />
         </label>
         <label className="flex items-center gap-4">
@@ -16,6 +22,7 @@ export default function LoginForm() {
           <input
             type="password"
             className="bg-gray-200 w-100 border border-[#169545] outline-none  rounded-md"
+            name="password"
           />
         </label>
         <input
