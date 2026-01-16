@@ -1,12 +1,9 @@
-import { registerUser } from "../actions/auth";
+import { loginUser } from "../actions/auth";
 
 export default function LoginForm() {
   return (
     <div className="flex flex-col items-center justify-center gap-5 min-h-screen">
-      <form
-        className="flex flex-col items-center gap-16  "
-        action={registerUser}
-      >
+      <form className="flex flex-col items-center gap-16  " action={loginUser}>
         <img className="w-xl" src="./logo.png" alt="" />
         <label className="flex items-center gap-4">
           Email:

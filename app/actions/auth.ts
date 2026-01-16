@@ -36,3 +36,24 @@ export async function registerUser(formData: FormData) {
     console.log(err);
   }
 }
+
+export async function loginUser(formData: FormData) {
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+
+  const user = await prisma.user.findUnique({
+    where: { email: email },
+  });
+
+  if (!user) {
+    throw new Error("Usuário não encontrado");
+  }
+
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordCorrect) {
+    throw new Error("Problemas no login");
+  }
+
+  console.log("Login realizado com sucesso!");
+}
