@@ -1,3 +1,8 @@
+enum TipoPessoa {
+  FISICA
+  JURIDICA
+}
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -23,7 +28,8 @@ model Client {
   id String @id @default(uuid())
   name String 
   email String @unique
-  password String
+  tipo TipoPessoa @default(FISICA)
+  documento   String     @unique // CPF ou CNPJ
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

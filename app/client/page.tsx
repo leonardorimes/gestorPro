@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { registerCLient } from "../actions/client";
+import { registerCLient } from '../actions/client';
 
 export default function PageClient() {
   return (
@@ -14,7 +14,6 @@ export default function PageClient() {
         <label className="flex items-center gap-4">
           Nome:
           <input
-            id="emailSignup"
             type="text"
             className="bg-gray-200 w-100 border border-[#169545] outline-none  rounded-md"
             name="clientName"
@@ -23,19 +22,24 @@ export default function PageClient() {
         <label className="flex items-center gap-4">
           email:
           <input
-            id="userSignup"
             type="text"
             className="bg-gray-200 w-100 border border-[#169545] outline-none  rounded-md"
             name="email"
           />
         </label>
         <label className="flex items-center gap-4">
-          password:
+          Pessoa Física ou Jurídica?
+          <select name="pessoa">
+            <option value="FISICA">FISICA</option>
+            <option value="JURIDICA">JURIDICA</option>
+          </select>
+        </label>
+        <label className="flex items-center gap-4">
+          Documento
           <input
-            id="senhaSignup"
-            type="password"
+            type="text"
             className="bg-gray-200 w-100 border border-[#169545] outline-none  rounded-md"
-            name="password"
+            name="documento"
           />
         </label>
         <input
