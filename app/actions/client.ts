@@ -1,13 +1,13 @@
-'use server';
+"use server";
 
-import { prisma } from '@/lib/prisma';
-import { error } from 'console';
+import { prisma } from "@/lib/prisma";
+import { error } from "console";
 
 export async function registerCLient(formData: FormData) {
-  const clientName = formData.get('clientName') as string;
-  const email = formData.get('email') as string;
-  const pessoa = formData.get('pessoa') as string;
-  const documento = formData.get('documento') as string;
+  const clientName = formData.get("clientName") as string;
+  const email = formData.get("email") as string;
+  const pessoa = formData.get("pessoa") as string;
+  const documento = formData.get("documento") as string;
 
   console.log(email, clientName, pessoa, documento);
 
@@ -16,12 +16,12 @@ export async function registerCLient(formData: FormData) {
   });
 
   if (userExists) {
-    throw new Error('O cliente já existe');
+    throw new Error("O cliente já existe");
   }
 
   try {
     if (!clientName || !email || !pessoa || !documento) {
-      throw new Error('Dados inválidos');
+      throw new Error("Dados inválidos");
     }
 
     await prisma.client.create({
@@ -35,4 +35,24 @@ export async function registerCLient(formData: FormData) {
   } catch (err) {
     console.log(err);
   }
+}
+export async function listarClientePaginado(page = 1) {
+  const take = 10;
+  const skip = (page - 1) * take;
+
+  const [clients, total] = await Promise.all([
+    prisma.client.findMany({ skip, take, orderBy: { createdAt: "desc" } }),
+    prisma.client.count(),
+  ]);
+
+  console.log(clients);
+
+  return {
+    data: clients,
+    meta: {
+      total,
+      page,
+      totalPages: Math.ceil(total / take),
+    },
+  };
 }
