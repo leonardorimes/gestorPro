@@ -1,6 +1,19 @@
 import { listarClientePaginado } from "../../actions/client";
 
-export default function ListarClientes() {
+type Client = {
+  id: String;
+  name: String;
+  email: String;
+  tipo: String;
+  documento: String;
+  isActive: Boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export default async function ListarClientes() {
+  const resultado = await listarClientePaginado(1);
+  console.log("os clientes estão aqui " + resultado.data[0]);
   const clientesFake = [
     {
       id: 1,
@@ -48,9 +61,9 @@ export default function ListarClientes() {
             </thead>
 
             <tbody className="divide-y divide-gray-100">
-              {clientesFake.map((cliente) => (
+              {resultado.data.map((cliente: Client) => (
                 <tr
-                  key={cliente.id}
+                  key={Number(cliente.id)}
                   className="hover:bg-gray-50 transition-colors"
                 >
                   <td className="p-4 text-center">
@@ -112,6 +125,4 @@ export default function ListarClientes() {
   );
 }
 
-const resultado = await listarClientePaginado(1);
-
-console.log("os clientes estão aqui " + resultado.data[0].name); // 10 clientes
+// 10 clientes
