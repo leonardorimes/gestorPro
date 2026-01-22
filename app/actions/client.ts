@@ -8,6 +8,7 @@ export async function registerCLient(formData: FormData) {
   const email = formData.get("email") as string;
   const pessoa = formData.get("pessoa") as string;
   const documento = formData.get("documento") as string;
+  const documento = formData.get("documento") as string;
 
   console.log(email, clientName, pessoa, documento);
 
@@ -40,19 +41,35 @@ export async function listarClientePaginado(page = 1) {
   const take = 10;
   const skip = (page - 1) * take;
 
-  const [clients, total] = await Promise.all([
-    prisma.client.findMany({ skip, take, orderBy: { createdAt: "desc" } }),
-    prisma.client.count(),
-  ]);
+  try {
+    const [clients, total] = await Promise.all([
+      prisma.client.findMany({ skip, take, orderBy: { createdAt: "desc" } }),
+      prisma.client.count(),
+    ]);
 
-  console.log(clients);
+    return {
+      data: clients,
+      meta: {
+        total,
+        page,
+        totalPages: Math.ceil(total / take),
+      },
+    };
+  } catch (error) {
+    throw new Error("problema em listar  " + error);
+  }
+}
 
-  return {
-    data: clients,
-    meta: {
-      total,
-      page,
-      totalPages: Math.ceil(total / take),
+export async function encontrarUnicoCliente(id) {
+  const client = prisma.client.findUnique({
+    where: {
+      id: id,
     },
-  };
+  });
+
+  if (!client) {
+    console.log("Não existe o cliente");
+  }
+
+  return client;
 }

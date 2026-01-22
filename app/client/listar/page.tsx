@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { listarClientePaginado } from "../../actions/client";
 
 type Client = {
@@ -13,25 +14,6 @@ type Client = {
 
 export default async function ListarClientes() {
   const resultado = await listarClientePaginado(1);
-  console.log("os clientes estão aqui " + resultado.data[0]);
-  const clientesFake = [
-    {
-      id: 1,
-      name: "João Silva",
-      email: "joao@email.com",
-      tipo: "FISICA",
-      documento: "123.456.789-00",
-      isActive: true,
-    },
-    {
-      id: 2,
-      name: "Empresa XPTO",
-      email: "contato@xpto.com",
-      tipo: "JURIDICA",
-      documento: "12.345.678/0001-99",
-      isActive: false,
-    },
-  ];
 
   return (
     <div className="flex flex-col items-center min-h-screen justify-center bg-gray-50 py-12 px-6 gap-2">
@@ -93,12 +75,12 @@ export default async function ListarClientes() {
                   </td>
                   <td className="p-4 text-center">
                     <div className="flex items-center justify-center gap-4">
-                      <a
-                        href="#"
+                      <Link
+                        href={`/client/editar/${cliente.id}`}
                         className="text-[#169545] hover:scale-110 transition-transform text-[11px] font-bold underline"
                       >
                         EDITAR
-                      </a>
+                      </Link>
                       <a
                         href="#"
                         className="text-red-500 hover:scale-110 transition-transform text-[11px] font-bold underline"
