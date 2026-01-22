@@ -1,14 +1,13 @@
-"use server";
+'use server';
 
-import { prisma } from "@/lib/prisma";
-import { error } from "console";
+import { prisma } from '@/lib/prisma';
+import { error } from 'console';
 
 export async function registerCLient(formData: FormData) {
-  const clientName = formData.get("clientName") as string;
-  const email = formData.get("email") as string;
-  const pessoa = formData.get("pessoa") as string;
-  const documento = formData.get("documento") as string;
-  const documento = formData.get("documento") as string;
+  const clientName = formData.get('clientName') as string;
+  const email = formData.get('email') as string;
+  const pessoa = formData.get('pessoa') as string;
+  const documento = formData.get('documento') as string;
 
   console.log(email, clientName, pessoa, documento);
 
@@ -17,12 +16,12 @@ export async function registerCLient(formData: FormData) {
   });
 
   if (userExists) {
-    throw new Error("O cliente já existe");
+    throw new Error('O cliente já existe');
   }
 
   try {
     if (!clientName || !email || !pessoa || !documento) {
-      throw new Error("Dados inválidos");
+      throw new Error('Dados inválidos');
     }
 
     await prisma.client.create({
@@ -43,7 +42,7 @@ export async function listarClientePaginado(page = 1) {
 
   try {
     const [clients, total] = await Promise.all([
-      prisma.client.findMany({ skip, take, orderBy: { createdAt: "desc" } }),
+      prisma.client.findMany({ skip, take, orderBy: { createdAt: 'desc' } }),
       prisma.client.count(),
     ]);
 
@@ -56,20 +55,47 @@ export async function listarClientePaginado(page = 1) {
       },
     };
   } catch (error) {
-    throw new Error("problema em listar  " + error);
+    throw new Error('problema em listar  ' + error);
   }
 }
 
-export async function encontrarUnicoCliente(id) {
-  const client = prisma.client.findUnique({
+export async function encontrarUnicoCliente(id: string) {
+  console.log('O id é ' + id);
+  const client = await prisma.client.findUnique({
     where: {
       id: id,
     },
   });
 
+  console.log('Cliente vindo do banco: ');
+
   if (!client) {
-    console.log("Não existe o cliente");
+    console.log('Não existe o cliente');
   }
 
   return client;
+}
+
+export async function updateCliente(formData: FormData) {
+  const clientName = formData.get('clientName') as string;
+  const email = formData.get('email') as string;
+  const pessoa = formData.get('pessoa') as string;
+  const documento = formData.get('documento') as string;
+  const id = formData.get('id') as string;
+
+  try {
+    await prisma.client.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: clientName,
+        email,
+        tipo: pessoa,
+        documento,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
 }

@@ -1,13 +1,13 @@
-import Link from "next/link";
-import { listarClientePaginado } from "../../actions/client";
+import Link from 'next/link';
+import { listarClientePaginado } from '../../actions/client';
 
-type Client = {
-  id: String;
-  name: String;
-  email: String;
-  tipo: String;
-  documento: String;
-  isActive: Boolean;
+export type Client = {
+  id: string;
+  name: string;
+  email: string;
+  tipo: string;
+  documento: string;
+  isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -68,9 +68,9 @@ export default async function ListarClientes() {
                   </td>
                   <td className="p-4 text-center">
                     <span
-                      className={`text-[10px] font-black ${cliente.isActive ? "text-[#169545]" : "text-red-500"}`}
+                      className={`text-[10px] font-black ${cliente.isActive ? 'text-[#169545]' : 'text-red-500'}`}
                     >
-                      {cliente.isActive ? "ATIVO" : "INATIVO"}
+                      {cliente.isActive ? 'ATIVO' : 'INATIVO'}
                     </span>
                   </td>
                   <td className="p-4 text-center">
