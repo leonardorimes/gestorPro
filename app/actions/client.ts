@@ -1,7 +1,7 @@
 'use server';
 
 import { prisma } from '@/lib/prisma';
-import { error } from 'console';
+import { revalidatePath } from 'next/cache';
 
 export async function registerCLient(formData: FormData) {
   const clientName = formData.get('clientName') as string;
@@ -42,7 +42,12 @@ export async function listarClientePaginado(page = 1) {
 
   try {
     const [clients, total] = await Promise.all([
-      prisma.client.findMany({ skip, take, orderBy: { createdAt: 'desc' } }),
+      prisma.client.findMany({
+        where: { isActive: true },
+        skip,
+        take,
+        orderBy: { createdAt: 'desc' },
+      }),
       prisma.client.count(),
     ]);
 
@@ -98,4 +103,27 @@ export async function updateCliente(formData: FormData) {
   } catch (error) {
     console.log(error);
   }
+}
+
+export async function deleteCliente(formData: FormData) {
+  const id = formData.get('id') as string;
+  console.log('O id é ' + id);
+
+  const client = encontrarUnicoCliente(id);
+
+  if (!client) {
+    console.log('Usuário não encontrado');
+  }
+
+  const clientExluido = await prisma.client.update({
+    where: {
+      id: id,
+    },
+    data: {
+      isActive: false,
+    },
+  });
+
+  console.log('o cliente ' + clientExluido.name + 'foi excluido com sucesso!');
+  revalidatePath('/client/listar');
 }

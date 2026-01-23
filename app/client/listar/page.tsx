@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { listarClientePaginado } from '../../actions/client';
+import { deleteCliente, listarClientePaginado } from '../../actions/client';
 
 export type Client = {
   id: string;
@@ -45,7 +45,7 @@ export default async function ListarClientes() {
             <tbody className="divide-y divide-gray-100">
               {resultado.data.map((cliente: Client) => (
                 <tr
-                  key={Number(cliente.id)}
+                  key={cliente.email}
                   className="hover:bg-gray-50 transition-colors"
                 >
                   <td className="p-4 text-center">
@@ -81,12 +81,15 @@ export default async function ListarClientes() {
                       >
                         EDITAR
                       </Link>
-                      <a
-                        href="#"
-                        className="text-red-500 hover:scale-110 transition-transform text-[11px] font-bold underline"
-                      >
-                        EXCLUIR
-                      </a>
+                      <form action={deleteCliente}>
+                        <input type="hidden" name="id" value={cliente.id} />
+                        <button
+                          type="submit"
+                          className="text-red-500 cursor hover:scale-110 transition-transform text-[11px] font-bold underline bg-transparent border-none cursor-pointer"
+                        >
+                          EXCLUIR
+                        </button>
+                      </form>
                     </div>
                   </td>
                 </tr>
