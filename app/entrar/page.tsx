@@ -1,11 +1,26 @@
+"use client";
+
+import { toast } from "sonner";
 import { registerUser } from "../actions/auth";
 
 export default function EntrarForm() {
+  async function handleEntrar(formData: FormData) {
+    const result = await registerUser(formData);
+
+    try {
+      if (result) {
+        toast.success("Usuário logado com sucesso!!");
+      }
+    } catch (error) {
+      toast.error(`${error}`);
+    }
+  }
+
   return (
     <div className="flex flex-col items-center justify-center gap-5 min-h-screen">
       <form
         className="flex flex-col items-center gap-16  "
-        action={registerUser}
+        action={handleEntrar}
       >
         <img className="w-xl" src="./logo.png" alt="" />
         <label className="flex items-center gap-4">

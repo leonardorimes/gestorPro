@@ -1,9 +1,30 @@
+"use client";
+
+import { toast } from "sonner";
 import { loginUser } from "../actions/auth";
 
+import { useRouter } from "next/navigation";
+
 export default function LoginForm() {
+  const router = useRouter();
+  async function handleLogin(formData: FormData) {
+    try {
+      const result = await loginUser(formData);
+      if (result) {
+        toast.success("Usuário criado com sucesso");
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      toast.error(`${error}`);
+    }
+  }
+
   return (
     <div className="flex flex-col items-center justify-center gap-5 min-h-screen">
-      <form className="flex flex-col items-center gap-16  " action={loginUser}>
+      <form
+        className="flex flex-col items-center gap-16  "
+        action={handleLogin}
+      >
         <img className="w-xl" src="./logo.png" alt="" />
         <label className="flex items-center gap-4">
           Email:

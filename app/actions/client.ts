@@ -1,27 +1,25 @@
-'use server';
+"use server";
 
-import { prisma } from '@/lib/prisma';
-import { revalidatePath } from 'next/cache';
+import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 export async function registerCLient(formData: FormData) {
-  const clientName = formData.get('clientName') as string;
-  const email = formData.get('email') as string;
-  const pessoa = formData.get('pessoa') as string;
-  const documento = formData.get('documento') as string;
-
-  console.log(email, clientName, pessoa, documento);
+  const clientName = formData.get("clientName") as string;
+  const email = formData.get("email") as string;
+  const pessoa = formData.get("pessoa") as string;
+  const documento = formData.get("documento") as string;
 
   const userExists = await prisma.client.findUnique({
     where: { email: email },
   });
 
   if (userExists) {
-    throw new Error('O cliente já existe');
+    throw new Error("O cliente já existe");
   }
 
   try {
     if (!clientName || !email || !pessoa || !documento) {
-      throw new Error('Dados inválidos');
+      throw new Error("Dados inválidos");
     }
 
     await prisma.client.create({
@@ -32,6 +30,7 @@ export async function registerCLient(formData: FormData) {
         documento,
       },
     });
+    return true;
   } catch (err) {
     console.log(err);
   }
@@ -46,7 +45,7 @@ export async function listarClientePaginado(page = 1) {
         where: { isActive: true },
         skip,
         take,
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
       }),
       prisma.client.count(),
     ]);
@@ -60,33 +59,30 @@ export async function listarClientePaginado(page = 1) {
       },
     };
   } catch (error) {
-    throw new Error('problema em listar  ' + error);
+    throw new Error("problema em listar  " + error);
   }
 }
 
 export async function encontrarUnicoCliente(id: string) {
-  console.log('O id é ' + id);
   const client = await prisma.client.findUnique({
     where: {
       id: id,
     },
   });
 
-  console.log('Cliente vindo do banco: ');
-
   if (!client) {
-    console.log('Não existe o cliente');
+    console.log("Não existe o cliente");
   }
 
   return client;
 }
 
 export async function updateCliente(formData: FormData) {
-  const clientName = formData.get('clientName') as string;
-  const email = formData.get('email') as string;
-  const pessoa = formData.get('pessoa') as string;
-  const documento = formData.get('documento') as string;
-  const id = formData.get('id') as string;
+  const clientName = formData.get("clientName") as string;
+  const email = formData.get("email") as string;
+  const pessoa = formData.get("pessoa") as string;
+  const documento = formData.get("documento") as string;
+  const id = formData.get("id") as string;
 
   try {
     await prisma.client.update({
@@ -106,13 +102,13 @@ export async function updateCliente(formData: FormData) {
 }
 
 export async function deleteCliente(formData: FormData) {
-  const id = formData.get('id') as string;
-  console.log('O id é ' + id);
+  const id = formData.get("id") as string;
+  console.log("O id é " + id);
 
   const client = encontrarUnicoCliente(id);
 
   if (!client) {
-    console.log('Usuário não encontrado');
+    console.log("Usuário não encontrado");
   }
 
   const clientExluido = await prisma.client.update({
@@ -124,6 +120,5 @@ export async function deleteCliente(formData: FormData) {
     },
   });
 
-  console.log('o cliente ' + clientExluido.name + 'foi excluido com sucesso!');
-  revalidatePath('/client/listar');
+  revalidatePath("/client/listar");
 }

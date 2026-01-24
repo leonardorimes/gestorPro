@@ -28,8 +28,6 @@ export async function registerUser(formData: FormData) {
 
     const hashedPassord = await bcrypt.hash(password, 10);
 
-    console.log(email, user, hashedPassord);
-
     await prisma.user.create({
       data: {
         email,
@@ -37,8 +35,9 @@ export async function registerUser(formData: FormData) {
         password: hashedPassord,
       },
     });
+    return true;
   } catch (err) {
-    console.log(err);
+    throw new Error("Dados Inválidos");
   }
 }
 
@@ -71,8 +70,7 @@ export async function loginUser(formData: FormData) {
     maxAge: 60 * 60 * 2, //2 horas em segundos
   });
 
-  console.log("Login realizado com sucesso!");
-  redirect("/dashboard");
+  return true;
 }
 
 export async function encrypt(payload: any) {
