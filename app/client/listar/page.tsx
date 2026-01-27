@@ -1,11 +1,13 @@
-import Link from 'next/link';
-import { deleteCliente, listarClientePaginado } from '../../actions/client';
+import Link from "next/link";
+import { listarClientePaginado } from "../../actions/client";
+import { DeleteForm } from "@/app/components/deleteForm";
+import { TipoPessoa } from "@/app/types/ClientTypes";
 
 export type Client = {
   id: string;
   name: string;
   email: string;
-  tipo: string;
+  tipo: TipoPessoa;
   documento: string;
   isActive: boolean;
   createdAt: Date;
@@ -68,9 +70,9 @@ export default async function ListarClientes() {
                   </td>
                   <td className="p-4 text-center">
                     <span
-                      className={`text-[10px] font-black ${cliente.isActive ? 'text-[#169545]' : 'text-red-500'}`}
+                      className={`text-[10px] font-black ${cliente.isActive ? "text-[#169545]" : "text-red-500"}`}
                     >
-                      {cliente.isActive ? 'ATIVO' : 'INATIVO'}
+                      {cliente.isActive ? "ATIVO" : "INATIVO"}
                     </span>
                   </td>
                   <td className="p-4 text-center">
@@ -81,15 +83,7 @@ export default async function ListarClientes() {
                       >
                         EDITAR
                       </Link>
-                      <form action={deleteCliente}>
-                        <input type="hidden" name="id" value={cliente.id} />
-                        <button
-                          type="submit"
-                          className="text-red-500 cursor hover:scale-110 transition-transform text-[11px] font-bold underline bg-transparent border-none cursor-pointer"
-                        >
-                          EXCLUIR
-                        </button>
-                      </form>
+                      <DeleteForm idCliente={cliente.id} />
                     </div>
                   </td>
                 </tr>

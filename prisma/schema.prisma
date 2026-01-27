@@ -36,3 +36,15 @@ model Client {
 
   @@map("clients")
 }
+
+model Servico {
+  id String @id @default(uuid())
+  name String
+  description String
+  service_type String
+  price Float
+  is_active Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+}

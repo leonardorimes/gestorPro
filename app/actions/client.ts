@@ -1,13 +1,16 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { Client } from "@prisma/client";
+import { error } from "console";
 import { revalidatePath } from "next/cache";
 
-export async function registerCLient(formData: FormData) {
-  const clientName = formData.get("clientName") as string;
-  const email = formData.get("email") as string;
-  const pessoa = formData.get("pessoa") as string;
-  const documento = formData.get("documento") as string;
+export async function registerCLient(formData: Client) {
+  console.log(formData);
+  const clientName = formData.name;
+  const email = formData.email;
+  const pessoa = formData.tipo;
+  const documento = formData.documento;
 
   const userExists = await prisma.client.findUnique({
     where: { email: email },
@@ -64,6 +67,7 @@ export async function listarClientePaginado(page = 1) {
 }
 
 export async function encontrarUnicoCliente(id: string) {
+  console.log(id);
   const client = await prisma.client.findUnique({
     where: {
       id: id,
@@ -77,12 +81,12 @@ export async function encontrarUnicoCliente(id: string) {
   return client;
 }
 
-export async function updateCliente(formData: FormData) {
-  const clientName = formData.get("clientName") as string;
-  const email = formData.get("email") as string;
-  const pessoa = formData.get("pessoa") as string;
-  const documento = formData.get("documento") as string;
-  const id = formData.get("id") as string;
+export async function updateCliente(client: Client): Promise<Boolean> {
+  const clientName = client.name;
+  const email = client.email;
+  const pessoa = client.tipo;
+  const documento = client.documento;
+  const id = client.id;
 
   try {
     await prisma.client.update({
@@ -96,29 +100,35 @@ export async function updateCliente(formData: FormData) {
         documento,
       },
     });
+
+    return true;
   } catch (error) {
-    console.log(error);
+    throw new Error("O usuário nao foi atualizada, tente novamente!");
   }
 }
 
-export async function deleteCliente(formData: FormData) {
-  const id = formData.get("id") as string;
-  console.log("O id é " + id);
-
+export async function deleteCliente(id: string): Promise<Boolean> {
   const client = encontrarUnicoCliente(id);
 
   if (!client) {
     console.log("Usuário não encontrado");
   }
 
-  const clientExluido = await prisma.client.update({
-    where: {
-      id: id,
-    },
-    data: {
-      isActive: false,
-    },
-  });
-
-  revalidatePath("/client/listar");
+  try {
+    const clientExluido = await prisma.client.update({
+      where: {
+        id: id,
+      },
+      data: {
+        isActive: false,
+      },
+    });
+    if (clientExluido) {
+      return true;
+    } else {
+      throw new Error("Nao pode ser excluido");
+    }
+  } catch (error) {
+    throw new Error("Erro ao excluir o cliente");
+  }
 }
