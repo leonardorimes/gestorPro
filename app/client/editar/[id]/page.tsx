@@ -1,7 +1,6 @@
-import { encontrarUnicoCliente, updateCliente } from "@/app/actions/client";
-import { FormEditar } from "@/app/components/editForm";
-import { Form } from "@/app/components/form";
-import { Client } from "../../listar/page";
+import { encontrarUnicoCliente } from '@/app/actions/client';
+import { Client } from '../../listar/page';
+import { FormEditar } from '../../components/editForm';
 
 export default async function PageClient({
   params,
@@ -16,7 +15,7 @@ export default async function PageClient({
   console.log(client);
 
   if (!client) {
-    throw new Error("Cliente não encontrado lallal");
+    throw new Error('Cliente não encontrado lallal');
   }
 
   const clienteAtualizar: Client = {

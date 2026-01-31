@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { listarClientePaginado } from "../../actions/client";
-import { DeleteForm } from "@/app/components/deleteForm";
-import { TipoPessoa } from "@/app/types/ClientTypes";
+import Link from 'next/link';
+import { listarClientePaginado } from '../../actions/client';
+import { TipoPessoa } from '@/app/types/ClientTypes';
+import { DeleteForm } from '../components/deleteForm';
 
 export type Client = {
   id: string;
@@ -70,9 +70,9 @@ export default async function ListarClientes() {
                   </td>
                   <td className="p-4 text-center">
                     <span
-                      className={`text-[10px] font-black ${cliente.isActive ? "text-[#169545]" : "text-red-500"}`}
+                      className={`text-[10px] font-black ${cliente.isActive ? 'text-[#169545]' : 'text-red-500'}`}
                     >
-                      {cliente.isActive ? "ATIVO" : "INATIVO"}
+                      {cliente.isActive ? 'ATIVO' : 'INATIVO'}
                     </span>
                   </td>
                   <td className="p-4 text-center">

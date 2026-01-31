@@ -1,12 +1,9 @@
-"use server";
+'use server';
 
-import { prisma } from "@/lib/prisma";
-import { Client } from "@prisma/client";
-import { error } from "console";
-import { revalidatePath } from "next/cache";
+import { prisma } from '@/lib/prisma';
+import { Client } from '../client/listar';
 
 export async function registerCLient(formData: Client) {
-  console.log(formData);
   const clientName = formData.name;
   const email = formData.email;
   const pessoa = formData.tipo;
@@ -17,57 +14,57 @@ export async function registerCLient(formData: Client) {
   });
 
   if (userExists) {
-    throw new Error("O cliente já existe");
+    throw new Error('CLIENTE_JA_EXISTE');
   }
 
-  try {
-    if (!clientName || !email || !pessoa || !documento) {
-      throw new Error("Dados inválidos");
-    }
+  if (!clientName || !email || !pessoa || !documento) {
+    throw new Error('DADOS_INVALIDOS');
+  }
 
-    await prisma.client.create({
-      data: {
-        name: clientName,
-        email,
-        tipo: pessoa,
-        documento,
-      },
-    });
+  const newClient = await prisma.client.create({
+    data: {
+      name: clientName,
+      email,
+      tipo: pessoa,
+      documento,
+    },
+  });
+
+  if (newClient) {
     return true;
-  } catch (err) {
-    console.log(err);
+  } else {
+    throw new Error('ERRO_AO_CRIAR_CLIENTE');
   }
 }
 export async function listarClientePaginado(page = 1) {
   const take = 10;
   const skip = (page - 1) * take;
 
-  try {
-    const [clients, total] = await Promise.all([
-      prisma.client.findMany({
-        where: { isActive: true },
-        skip,
-        take,
-        orderBy: { createdAt: "desc" },
-      }),
-      prisma.client.count(),
-    ]);
+  const [clients, total] = await Promise.all([
+    prisma.client.findMany({
+      where: { isActive: true },
+      skip,
+      take,
+      orderBy: { createdAt: 'desc' },
+    }),
+    prisma.client.count(),
+  ]);
 
-    return {
-      data: clients,
-      meta: {
-        total,
-        page,
-        totalPages: Math.ceil(total / take),
-      },
-    };
-  } catch (error) {
-    throw new Error("problema em listar  " + error);
+  if (!clients) {
+    throw new Error('ERRO_AO_LISTAR_CLIENTE');
   }
+
+  return {
+    data: clients,
+    meta: {
+      total,
+      page,
+      totalPages: Math.ceil(total / take),
+    },
+  };
 }
 
 export async function encontrarUnicoCliente(id: string) {
-  console.log(id);
   const client = await prisma.client.findUnique({
     where: {
       id: id,
@@ -75,7 +72,7 @@ export async function encontrarUnicoCliente(id: string) {
   });
 
   if (!client) {
-    console.log("Não existe o cliente");
+    throw new Error('CLIENTE_NAO_ENCONTRADO');
   }
 
   return client;
@@ -88,22 +85,22 @@ export async function updateCliente(client: Client): Promise<Boolean> {
   const documento = client.documento;
   const id = client.id;
 
-  try {
-    await prisma.client.update({
-      where: {
-        id: id,
-      },
-      data: {
-        name: clientName,
-        email,
-        tipo: pessoa,
-        documento,
-      },
-    });
+  const updatedClient = await prisma.client.update({
+    where: {
+      id: id,
+    },
+    data: {
+      name: clientName,
+      email,
+      tipo: pessoa,
+      documento,
+    },
+  });
 
+  if (updatedClient) {
     return true;
-  } catch (error) {
-    throw new Error("O usuário nao foi atualizada, tente novamente!");
+  } else {
+    throw new Error('ERRO_AO_EXCLUIR_CLIENTE');
   }
 }
 
@@ -111,24 +108,20 @@ export async function deleteCliente(id: string): Promise<Boolean> {
   const client = encontrarUnicoCliente(id);
 
   if (!client) {
-    console.log("Usuário não encontrado");
+    throw new Error('CLIENTE_NAO_ENCONTRADO');
   }
 
-  try {
-    const clientExluido = await prisma.client.update({
-      where: {
-        id: id,
-      },
-      data: {
-        isActive: false,
-      },
-    });
-    if (clientExluido) {
-      return true;
-    } else {
-      throw new Error("Nao pode ser excluido");
-    }
-  } catch (error) {
-    throw new Error("Erro ao excluir o cliente");
+  const clientExluido = await prisma.client.update({
+    where: {
+      id: id,
+    },
+    data: {
+      isActive: false,
+    },
+  });
+  if (clientExluido) {
+    return true;
+  } else {
+    throw new Error('ERRO_AO_EXCLUIR_CLIENTE');
   }
 }
