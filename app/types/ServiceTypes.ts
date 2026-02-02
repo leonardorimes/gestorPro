@@ -1,19 +1,17 @@
-
 export type TipoServico =
-  | "DESENVOLVIMENTO"
-  | "MANUTENCAO"
-  | "SUPORTE"
-  | "CONSULTORIA"
-  | "HOSPEDAGEM";
+  | 'DESENVOLVIMENTO'
+  | 'MANUTENCAO'
+  | 'SUPORTE'
+  | 'CONSULTORIA'
+  | 'HOSPEDAGEM';
 
 export type Service = {
   id: string;
   name: string;
-  descricao: string;
-  tipo: TipoServico;
-  price: string;
-  isActive: boolean;
+  description: string;
+  service_type: TipoServico;
+  price: number;
+  is_active: boolean;
   createdAt: Date;
   updatedAt: Date;
 };
-

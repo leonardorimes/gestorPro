@@ -1,6 +1,5 @@
 'use client';
 
-
 import { registerService } from '@/app/actions/service';
 import { Service, TipoServico } from '@/app/types/ServiceTypes';
 import { useRouter } from 'next/navigation';
@@ -10,7 +9,7 @@ import { toast } from 'sonner';
 export function FormCriar() {
   const [name, setName] = useState('');
   const [descricao, setDescricao] = useState('');
-const [tipo, setTipo] = useState<TipoServico>("DESENVOLVIMENTO");
+  const [tipo, setTipo] = useState<TipoServico>('DESENVOLVIMENTO');
   const [preco, setPreco] = useState('');
   const router = useRouter();
 
@@ -28,11 +27,15 @@ const [tipo, setTipo] = useState<TipoServico>("DESENVOLVIMENTO");
       createdAt: new Date(),
     };
 
-    if (await registerService(ServiceCriado)) {
-      toast.success('Usuário atualizado com sucesso!');
-      router.push('/client/listar');
-    } else {
-      toast.error('Error tente novamente');
+    try {
+      if (await registerService(ServiceCriado)) {
+        toast.success('Serviço criado com sucesso!');
+        // router.push('/client/listar');
+      } else {
+        toast.error('Error tente novamente');
+      }
+    } catch (e) {
+      toast.error('Erro tente novamente');
     }
   }
 
@@ -45,7 +48,10 @@ const [tipo, setTipo] = useState<TipoServico>("DESENVOLVIMENTO");
 
       <label>
         Descrição
-        <input value={descricao} onChange={(e) => setDescricao(e.target.value)} />
+        <input
+          value={descricao}
+          onChange={(e) => setDescricao(e.target.value)}
+        />
       </label>
 
       <label>
@@ -58,18 +64,13 @@ const [tipo, setTipo] = useState<TipoServico>("DESENVOLVIMENTO");
           <option value="MANUTENCAO">Manutenção Corretiva</option>
           <option value="SUPORTE">Suporte Técnico</option>
           <option value="CONSULTORIA">Consultoria</option>
-          <option value="HOSPEDAGEM">
-          Hospedagem/Cloud</option>
-
+          <option value="HOSPEDAGEM">Hospedagem/Cloud</option>
         </select>
       </label>
 
       <label>
         preço
-        <input
-          value={preco}
-          onChange={(e) => setPreco(e.target.value)}
-        />
+        <input value={preco} onChange={(e) => setPreco(e.target.value)} />
       </label>
 
       <button type="submit">Salvar</button>

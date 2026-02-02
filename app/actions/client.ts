@@ -100,7 +100,7 @@ export async function updateCliente(client: Client): Promise<Boolean> {
   if (updatedClient) {
     return true;
   } else {
-    throw new Error('ERRO_AO_EXCLUIR_CLIENTE');
+    throw new Error('ERRO_AO_ATUALIZAR_CLIENTE');
   }
 }
 
