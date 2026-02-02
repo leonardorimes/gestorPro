@@ -1,5 +1,5 @@
 import { encontrarUnicoCliente } from '@/app/actions/client';
-import { Client } from '../../listar/page';
+import { Client } from "@/app/types/ClientTypes"
 import { FormEditar } from '../../components/editForm';
 
 export default async function PageClient({

@@ -1,12 +1,12 @@
 "use client";
 
 import { registerCLient, updateCliente } from "@/app/actions/client";
-import { Client } from "@/app/client/listar/page";
+import { Client } from "@/app/types/ClientTypes";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export function FormCriar() {
+export default function FormCriar() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [tipo, setTipo] = useState<Client["tipo"]>("FISICA");

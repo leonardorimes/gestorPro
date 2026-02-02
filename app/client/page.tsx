@@ -1,7 +1,7 @@
 "use client";
 
-import { registerCLient } from "../actions/client";
-import { FormCriar } from "../components/createForm";
+
+import FormCriar from "@/app/client/components/createForm";
 
 export default function PageClient() {
   return (

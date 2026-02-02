@@ -1,18 +1,9 @@
 import Link from 'next/link';
 import { listarClientePaginado } from '../../actions/client';
-import { TipoPessoa } from '@/app/types/ClientTypes';
+import { Client } from '@/app/types/ClientTypes';
 import { DeleteForm } from '../components/deleteForm';
 
-export type Client = {
-  id: string;
-  name: string;
-  email: string;
-  tipo: TipoPessoa;
-  documento: string;
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-};
+
 
 export default async function ListarClientes() {
   const resultado = await listarClientePaginado(1);

@@ -1,7 +1,7 @@
 "use client";
 
 import { updateCliente } from "@/app/actions/client";
-import { Client } from "@/app/client/listar/page";
+import { Client } from "@/app/types/ClientTypes";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";

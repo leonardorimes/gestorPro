@@ -1,28 +1,34 @@
 'use server';
 
 import { prisma } from '@/lib/prisma';
-import { error } from 'console';
+import { Service } from '../types/ServiceTypes';
 
-export async function registerService(formData: FormData) {
-  console.log(formData);
 
-  const servicename = formData.name;
-  const description = formData.description;
-  const serviceType = formData.service_type;
-  const price = formData.price;
+export async function registerService(formData: Service) {
 
-  if (!servicename && description && !serviceType && price) {
+
+  const serviceName = formData.name;
+  const descricao = formData.descricao;
+  const serviceType = formData.tipo;
+  const preco = formData.price;
+
+  console.log(serviceName, descricao, serviceType, preco)
+
+  if (!serviceName || !descricao || !serviceType || !preco) {
     throw new Error('DADOS_INVALIDOS');
   }
 
-  const newService = prisma.servico.create({
+  const newService = await prisma.servico.create({
     data: {
-      name: servicename,
-      description,
+      name: serviceName,
+      description: descricao,
       service_type: serviceType,
-      price,
+      is_active: true,
+      price: Number(preco)
     },
   });
+
+  console.log("esta indo para o banco " + newService)
 
   if (newService) {
     return true;

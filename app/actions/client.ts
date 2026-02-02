@@ -1,7 +1,7 @@
 'use server';
 
 import { prisma } from '@/lib/prisma';
-import { Client } from '../client/listar';
+import { Client } from '@/app/types/ClientTypes';
 
 export async function registerCLient(formData: Client) {
   const clientName = formData.name;

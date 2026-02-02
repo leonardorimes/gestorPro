@@ -1,33 +1,34 @@
 'use client';
 
-import { registerCLient } from '@/app/actions/client';
-import { Client } from '@/app/client/listar/page';
+
+import { registerService } from '@/app/actions/service';
+import { Service, TipoServico } from '@/app/types/ServiceTypes';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 export function FormCriar() {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [tipo, setTipo] = useState<Client['tipo']>('FISICA');
-  const [documento, setDocumento] = useState('');
+  const [descricao, setDescricao] = useState('');
+const [tipo, setTipo] = useState<TipoServico>("DESENVOLVIMENTO");
+  const [preco, setPreco] = useState('');
   const router = useRouter();
 
   async function handleCriar(e: React.FormEvent) {
     e.preventDefault();
 
-    const clientCriado: Client = {
-      id: '1',
+    const ServiceCriado: Service = {
+      id: '',
       name,
-      email,
+      descricao,
       tipo,
       isActive: true,
-      documento,
+      price: preco,
       updatedAt: new Date(),
       createdAt: new Date(),
     };
 
-    if (await registerCLient(clientCriado)) {
+    if (await registerService(ServiceCriado)) {
       toast.success('Usuário atualizado com sucesso!');
       router.push('/client/listar');
     } else {
@@ -44,25 +45,30 @@ export function FormCriar() {
 
       <label>
         Descrição
-        <input value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input value={descricao} onChange={(e) => setDescricao(e.target.value)} />
       </label>
 
       <label>
         Tipo do serviço:
         <select
           value={tipo}
-          onChange={(e) => setTipo(e.target.value as Client['tipo'])}
+          onChange={(e) => setTipo(e.target.value as Service['tipo'])}
         >
-          <option value="FISICA">FISICA</option>
-          <option value="JURIDICA">JURIDICA</option>
+          <option value="DESENVOLVIMENTO">Desenvolvimento</option>
+          <option value="MANUTENCAO">Manutenção Corretiva</option>
+          <option value="SUPORTE">Suporte Técnico</option>
+          <option value="CONSULTORIA">Consultoria</option>
+          <option value="HOSPEDAGEM">
+          Hospedagem/Cloud</option>
+
         </select>
       </label>
 
       <label>
         preço
         <input
-          value={documento}
-          onChange={(e) => setDocumento(e.target.value)}
+          value={preco}
+          onChange={(e) => setPreco(e.target.value)}
         />
       </label>
 
