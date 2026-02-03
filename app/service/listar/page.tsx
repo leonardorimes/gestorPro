@@ -1,5 +1,7 @@
 import { listService } from '@/app/actions/service';
 import { Service } from '@/app/types/ServiceTypes';
+import Link from 'next/link';
+import { DeleteForm } from '../components/deleteForm';
 
 export default async function ListarClientes() {
   const resultado = await listService(1);
@@ -63,17 +65,17 @@ export default async function ListarClientes() {
                       {service.is_active ? 'ATIVO' : 'INATIVO'}
                     </span>
                   </td>
-                  {/* <td className="p-4 text-center">
+                  <td className="p-4 text-center">
                     <div className="flex items-center justify-center gap-4">
                       <Link
-                        href={`/client/editar/${service.id}`}
+                        href={`/service/editar/${service.id}`}
                         className="text-[#169545] hover:scale-110 transition-transform text-[11px] font-bold underline"
                       >
                         EDITAR
                       </Link>
-                      <DeleteForm idCliente={service.id} />
+                      <DeleteForm idService={service.id} />
                     </div>
-                  </td> */}
+                  </td> 
                 </tr>
               ))}
             </tbody>
@@ -81,7 +83,7 @@ export default async function ListarClientes() {
         </div>
       </div>
 
-      {/* Margem automática no topo deste link para empurrá-lo para o fim da página se necessário */}
+
       <a
         href="#"
         className="mt-auto pt-20 text-gray-400 hover:text-[#169545] text-xs font-semibold uppercase tracking-widest transition-all"

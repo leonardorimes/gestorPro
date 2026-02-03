@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 
 export function FormCriar() {
   const [name, setName] = useState('');
-  const [descricao, setDescricao] = useState('');
+  const [description, setDescription] = useState('');
   const [tipo, setTipo] = useState<TipoServico>('DESENVOLVIMENTO');
   const [preco, setPreco] = useState('');
   const router = useRouter();
@@ -19,10 +19,10 @@ export function FormCriar() {
     const ServiceCriado: Service = {
       id: '',
       name,
-      descricao,
-      tipo,
-      isActive: true,
-      price: preco,
+      description,
+      service_type: tipo,
+      is_active:  true,
+      price: Number(preco),
       updatedAt: new Date(),
       createdAt: new Date(),
     };
@@ -49,8 +49,8 @@ export function FormCriar() {
       <label>
         Descrição
         <input
-          value={descricao}
-          onChange={(e) => setDescricao(e.target.value)}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         />
       </label>
 
@@ -58,7 +58,7 @@ export function FormCriar() {
         Tipo do serviço:
         <select
           value={tipo}
-          onChange={(e) => setTipo(e.target.value as Service['tipo'])}
+          onChange={(e) => setTipo(e.target.value as Service['service_type'])}
         >
           <option value="DESENVOLVIMENTO">Desenvolvimento</option>
           <option value="MANUTENCAO">Manutenção Corretiva</option>
