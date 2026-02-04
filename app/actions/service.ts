@@ -2,6 +2,10 @@
 
 import { prisma } from '@/lib/prisma';
 import { Service, TipoServico } from '../types/ServiceTypes';
+import { Service as ServicePrisma } from "@prisma/client";
+
+
+
 
 export async function registerService(formData: Service) {
   const serviceName = formData.name;
@@ -9,18 +13,17 @@ export async function registerService(formData: Service) {
   const serviceType = formData.service_type;
   const preco = formData.price;
 
-  console.log(serviceName, descricao, serviceType, preco);
 
   if (!serviceName || !descricao || !serviceType || !preco) {
     throw new Error('DADOS_INVALIDOS');
   }
 
-  const newService = await prisma.servico.create({
+  const newService = await prisma.service.create({
     data: {
       name: serviceName,
       description: descricao,
-      service_type: serviceType,
-      is_active: true,
+      serviceType: serviceType,
+      isActive: true,
       price: Number(preco),
     },
   });
@@ -32,32 +35,20 @@ export async function registerService(formData: Service) {
   }
 }
 
-export async function findOneService(id: string): Promise<Service | null> {
+export async function findOneService(id: string): Promise<ServicePrisma | null> {
   
 
-  const servico = await prisma.servico.findUnique({
+  const service = await prisma.service.findUnique({
     where: {
       id: id,
     },
   });
 
-  if (!servico) {
+  if (!service) {
     throw new Error('SERVICO_NAO_ENCONTRADO');
   }
 
-
-  const servicoEncontrado: Service = {
-     id: servico.id,
-      name: servico.name,
-      description: servico.description,
-      service_type: servico.service_type as TipoServico,
-      price: servico.price,
-      is_active: servico.is_active,
-      createdAt: servico.createdAt,
-      updatedAt: servico.updatedAt,
-  }
-
-  return servicoEncontrado;
+  return service;
 }
 
 export async function updateService(service: Service) {
@@ -68,16 +59,16 @@ export async function updateService(service: Service) {
   const price = Number(service.price);
   const isActive = service.is_active;
 
-  const serviceAtualizado = await prisma.servico.update({
+  const serviceAtualizado = await prisma.service.update({
     where: {
       id: id,
     },
     data: {
       name,
       description: descricao,
-      service_type: tipoServico,
+      serviceType: tipoServico,
       price,
-      is_active: isActive,
+      isActive: isActive,
     },
   });
 
@@ -93,13 +84,13 @@ export async function listService(page: number) {
   const skip = (page - 1) * take;
 
   const [services, total] = await Promise.all([
-    prisma.servico.findMany({
-      where: { is_active: true },
+    prisma.service.findMany({
+      where: { isActive: true },
       skip,
       take,
       orderBy: { createdAt: 'desc' },
     }),
-    prisma.servico.count(),
+    prisma.service.count(),
   ]);
 
   if (!services) {
@@ -107,7 +98,7 @@ export async function listService(page: number) {
   }
 
   return {
-    data: services as Service[],
+    data: services,
     meta: {
       total,
       page,
@@ -123,11 +114,11 @@ export async function deleteService(id: string){
     throw new Error('SERVICO_NAO_ENCONTRADO')
   }
 
-  const serviceExcluido = await prisma.servico.update({
+  const serviceExcluido = await prisma.service.update({
     where: {
       id: id
     }, data: {
-      is_active: false
+      isActive: false
     }
   })
 
@@ -137,4 +128,18 @@ export async function deleteService(id: string){
     return true;
   }
 
+}
+
+export async function listAllServices(): Promise<ServicePrisma[]>{
+  console.log("executandooo")
+  const services = await prisma.service.findMany({
+    where: {isActive: true}
+  })
+
+  if(services.length === 0){
+    throw new Error("Serviços não encontrado!")
+  }
+  console.log(services)
+
+  return services
 }
