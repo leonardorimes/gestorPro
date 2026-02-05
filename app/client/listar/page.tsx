@@ -3,8 +3,6 @@ import { listarClientePaginado } from '../../actions/client';
 import { Client } from '@/app/types/ClientTypes';
 import { DeleteForm } from '../components/deleteForm';
 
-
-
 export default async function ListarClientes() {
   const resultado = await listarClientePaginado(1);
 

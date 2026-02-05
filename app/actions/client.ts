@@ -125,3 +125,15 @@ export async function deleteCliente(id: string): Promise<Boolean> {
     throw new Error('ERRO_AO_EXCLUIR_CLIENTE');
   }
 }
+
+export async function listAllClients() {
+  const clients = await prisma.client.findMany({
+    where: { isActive: true },
+  });
+
+  if (clients.length === 0) {
+    throw new Error('Clientes não encontrado!');
+  }
+
+  return clients;
+}

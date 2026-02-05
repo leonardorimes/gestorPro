@@ -10,6 +10,9 @@ enum ServiceOrderStatus {
   CANCELED
 }
 
+
+
+
 generator client {
   provider = "prisma-client-js"
 }

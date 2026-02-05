@@ -1,18 +1,14 @@
 'use server';
 
 import { prisma } from '@/lib/prisma';
-import { Service, TipoServico } from '../types/ServiceTypes';
-import { Service as ServicePrisma } from "@prisma/client";
-
-
-
+import { Service, ServiceOrder, TipoServico } from '../types/ServiceTypes';
+import { Service as ServicePrisma } from '@prisma/client';
 
 export async function registerService(formData: Service) {
   const serviceName = formData.name;
   const descricao = formData.description;
   const serviceType = formData.service_type;
   const preco = formData.price;
-
 
   if (!serviceName || !descricao || !serviceType || !preco) {
     throw new Error('DADOS_INVALIDOS');
@@ -35,9 +31,9 @@ export async function registerService(formData: Service) {
   }
 }
 
-export async function findOneService(id: string): Promise<ServicePrisma | null> {
-  
-
+export async function findOneService(
+  id: string,
+): Promise<ServicePrisma | null> {
   const service = await prisma.service.findUnique({
     where: {
       id: id,
@@ -107,39 +103,68 @@ export async function listService(page: number) {
   };
 }
 
-export async function deleteService(id: string){
-  const service = findOneService(id)
+export async function deleteService(id: string) {
+  const service = findOneService(id);
 
-  if(!service) {
-    throw new Error('SERVICO_NAO_ENCONTRADO')
+  if (!service) {
+    throw new Error('SERVICO_NAO_ENCONTRADO');
   }
 
   const serviceExcluido = await prisma.service.update({
     where: {
-      id: id
-    }, data: {
-      isActive: false
-    }
-  })
+      id: id,
+    },
+    data: {
+      isActive: false,
+    },
+  });
 
-  if(!serviceExcluido){
-    throw new Error("ERRO_AO_EXCLUIR_SERVICO");
-  }else{
+  if (!serviceExcluido) {
+    throw new Error('ERRO_AO_EXCLUIR_SERVICO');
+  } else {
     return true;
   }
-
 }
 
-export async function listAllServices(): Promise<ServicePrisma[]>{
-  console.log("executandooo")
+export async function listAllServices(): Promise<ServicePrisma[]> {
   const services = await prisma.service.findMany({
-    where: {isActive: true}
-  })
+    where: { isActive: true },
+  });
 
-  if(services.length === 0){
-    throw new Error("Serviços não encontrado!")
+  if (services.length === 0) {
+    throw new Error('Serviços não encontrado!');
   }
-  console.log(services)
+  console.log(services);
 
-  return services
+  return services;
+}
+
+export async function createOrderService(orderService: ServiceOrder) {
+  console.log(orderService);
+  if (
+    !orderService.customerId ||
+    !orderService.serviceId ||
+    !orderService.price
+  ) {
+    throw new Error('preencha todas as inforamações');
+  }
+
+  const newOrderService = await prisma.serviceOrder.create({
+    data: {
+      customerId: orderService.customerId,
+      serviceId: orderService.serviceId,
+      price: orderService.price,
+      status: orderService.status,
+      startedAt: orderService.startedAt,
+      finishedAt: orderService.finishedAt,
+      createdAt: orderService.createdAt,
+      updatedAt: orderService.updatedAt,
+    },
+  });
+
+  if (newOrderService) {
+    return true;
+  } else {
+    throw new Error('ERRO_AO_CRIAR_SERVICO');
+  }
 }
