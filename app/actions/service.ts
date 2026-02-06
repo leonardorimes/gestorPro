@@ -168,3 +168,35 @@ export async function createOrderService(orderService: ServiceOrder) {
     throw new Error('ERRO_AO_CRIAR_SERVICO');
   }
 }
+
+export async function listarserviceOrderPaginado(page: number) {
+  const take = 10;
+  const skip = (page - 1) * take;
+
+  const [serviceOrders, total] = await Promise.all([
+    prisma.serviceOrder.findMany({
+      // where: { isActive: true },
+      skip,
+      take,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        customer: true,
+        service: true,
+      },
+    }),
+    prisma.serviceOrder.count(),
+  ]);
+
+  if (!serviceOrders) {
+    throw new Error('ERRO_AO_LISTAR_SERVICE');
+  }
+
+  return {
+    data: serviceOrders,
+    meta: {
+      total,
+      page,
+      totalPages: Math.ceil(total / take),
+    },
+  };
+}
