@@ -3,15 +3,13 @@
 import {
   createOrderService,
   listAllServices,
-  registerService,
 } from '@/app/actions/service';
-import { Service, ServiceOrder, TipoServico } from '@/app/types/ServiceTypes';
+import { ServiceOrder } from '@/app/types/ServiceTypes';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Service as PrismaService } from '@prisma/client';
 import { Client as PrismaClient } from '@prisma/client';
-import ListarClientes from '@/app/client/listar/page';
 import { listAllClients } from '@/app/actions/client';
 
 export default function FormCriar() {
@@ -43,6 +41,7 @@ export default function FormCriar() {
   async function handleCriar(e: React.FormEvent) {
     console.log('O id do cliente é ' + clientId);
     e.preventDefault();
+
     const newOrderService: ServiceOrder = {
       id: '',
       customerId: clientId,
@@ -60,45 +59,128 @@ export default function FormCriar() {
       createOrderService(newOrderService);
       toast.success('Criada com sucesso');
     } catch (error) {
-      toast.error('erro ao criar');
+      toast.error('Erro ao criar');
     }
   }
 
   return (
-    <form onSubmit={handleCriar} className="flex flex-col items-center gap-16">
-      <label>
-        Cliente
-        <select value={clientId} onChange={(e) => setClientId(e.target.value)}>
-          <option value=""> Selecione um cliente: </option>
-          {clients.map((client) => (
-            <option key={client.id} value={client.id}>
-              {client.name}
-            </option>
-          ))}
-        </select>
-      </label>
+    <form
+      onSubmit={handleCriar}
+      className="
+        w-full max-w-[92vw] sm:max-w-2xl mx-auto
+        flex flex-col
+        gap-12 sm:gap-16
+        px-3 sm:px-6
+        py-10 sm:py-16
+      "
+    >
+      <div className="w-full max-w-md mx-auto flex flex-col gap-12 sm:gap-16">
+        {/* Cabeçalho */}
+        <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
+          <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
+            Nova ordem de serviço
+          </h1>
+          <p className="text-sm text-gray-500 leading-relaxed">
+            Selecione o cliente, o serviço e defina o valor.
+          </p>
+        </div>
 
-      <label>
-        Tipo do serviço:
-        <select
-          value={serviceId}
-          onChange={(e) => setServiceId(e.target.value)}
-        >
-          <option value=""> Selecione um serviço: </option>
-          {services.map((service) => (
-            <option key={service.id} value={service.id}>
-              {service.name}
-            </option>
-          ))}
-        </select>
-      </label>
+        {/* Campos */}
+        <div className="flex flex-col gap-10 sm:gap-14">
+          {/* Cliente */}
+          <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+              Cliente
+            </label>
+            <select
+              value={clientId}
+              onChange={(e) => setClientId(e.target.value)}
+              className="
+                bg-transparent
+                border-b border-gray-300
+                py-2 sm:py-2.5
+                text-base
+                focus:outline-none
+                focus:border-[#169545]
+                transition-colors
+              "
+            >
+              <option value="">Selecione um cliente</option>
+              {clients.map((client) => (
+                <option key={client.id} value={client.id}>
+                  {client.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-      <label>
-        preço
-        <input value={preco} onChange={(e) => setPreco(e.target.value)} />
-      </label>
+          {/* Serviço */}
+          <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+              Serviço
+            </label>
+            <select
+              value={serviceId}
+              onChange={(e) => setServiceId(e.target.value)}
+              className="
+                bg-transparent
+                border-b border-gray-300
+                py-2 sm:py-2.5
+                text-base
+                focus:outline-none
+                focus:border-[#169545]
+                transition-colors
+              "
+            >
+              <option value="">Selecione um serviço</option>
+              {services.map((service) => (
+                <option key={service.id} value={service.id}>
+                  {service.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-      <button type="submit">Salvar</button>
+          {/* Preço */}
+          <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+              Preço
+            </label>
+            <input
+              value={preco}
+              onChange={(e) => setPreco(e.target.value)}
+              placeholder="0,00"
+              className="
+                bg-transparent
+                border-b border-gray-300
+                py-2 sm:py-2.5
+                text-base
+                focus:outline-none
+                focus:border-[#169545]
+                transition-colors
+              "
+            />
+          </div>
+        </div>
+
+        {/* Ação */}
+        <div className="pt-6 sm:pt-10 pl-3 sm:pl-0">
+          <button
+            type="submit"
+            className="
+              w-full sm:w-auto
+              bg-[#169545] sm:bg-transparent
+              text-white sm:text-[#169545]
+              py-3 sm:py-0
+              text-sm font-semibold
+              hover:opacity-90
+              transition-opacity
+            "
+          >
+            Criar ordem →
+          </button>
+        </div>
+      </div>
     </form>
   );
 }

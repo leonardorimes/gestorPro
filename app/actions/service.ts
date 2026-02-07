@@ -1,7 +1,7 @@
 'use server';
 
 import { prisma } from '@/lib/prisma';
-import { Service, ServiceOrder, TipoServico } from '../types/ServiceTypes';
+import { Service, ServiceOrder, TipoServico, UpdateServiceOrderDTO } from '../types/ServiceTypes';
 import { Service as ServicePrisma } from '@prisma/client';
 import { ServiceOrderWithRelations } from '../serviceorder/listar/page';
 
@@ -214,7 +214,7 @@ export async function encontrarServiceOrder(id: string) {
   return serviceOrder;
 }
 
-export async function updateOrderService(order: ServiceOrderWithRelations) {
+export async function updateOrderService(order: UpdateServiceOrderDTO) {
   const serviceOrder = await prisma.serviceOrder.update({
     where: { id: order.id },
     data: {
@@ -234,4 +234,21 @@ export async function updateOrderService(order: ServiceOrderWithRelations) {
   });
 
   return serviceOrder;
+}
+
+export async function deleteOrder(id: string){
+    const deleteOrderService = await prisma.serviceOrder.update({
+      where: {
+        id: id
+      },
+      data: {
+        status: "CANCELED"
+      }
+    })
+
+    if(!deleteOrderService){
+      throw new Error("ERRO_AO_DELETAR_ORDER_SERVICE")
+    }else{
+      return true
+    }
 }

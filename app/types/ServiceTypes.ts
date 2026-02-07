@@ -28,3 +28,13 @@ export type ServiceOrder = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type UpdateServiceOrderDTO = {
+  id: string;
+  customerId: string;
+  serviceId: string;
+  price: number;
+  status: ServiceOrderStatus;
+  startedAt: Date;
+  finishedAt?: Date | null;
+};

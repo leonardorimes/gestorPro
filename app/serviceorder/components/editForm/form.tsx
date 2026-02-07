@@ -1,47 +1,70 @@
 'use client';
 
-import { registerService } from '@/app/actions/service';
-import { Service, TipoServico } from '@/app/types/ServiceTypes';
+import { listAllServices, updateOrderService } from '@/app/actions/service';
+import { UpdateServiceOrderDTO } from '@/app/types/ServiceTypes';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { Service as PrismaService } from '@prisma/client';
+import { Client as PrismaClient } from '@prisma/client';
+import { listAllClients } from '@/app/actions/client';
 
-export function FormCriar() {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [tipo, setTipo] = useState<TipoServico>('DESENVOLVIMENTO');
-  const [preco, setPreco] = useState('');
+type Props = {
+  serviceOrder: UpdateServiceOrderDTO;
+};
+
+export default function FormEditar({ serviceOrder }: Props) {
+  const [preco, setPreco] = useState(serviceOrder.price);
+  const [services, setServices] = useState<PrismaService[]>([]);
+  const [serviceId, setServiceId] = useState(serviceOrder.serviceId);
+  const [clientId, setClientId] = useState(serviceOrder.customerId);
+  const [clients, setClients] = useState<PrismaClient[]>([]);
+
   const router = useRouter();
 
-  async function handleCriar(e: React.FormEvent) {
+  useEffect(() => {
+    async function loadServices() {
+      const services = await listAllServices();
+      setServices(services);
+    }
+
+    loadServices();
+  }, []);
+
+  useEffect(() => {
+    async function loadClients() {
+      const clients = await listAllClients();
+      setClients(clients);
+    }
+    loadClients();
+  }, []);
+
+  async function handleUpdate(e: React.FormEvent) {
     e.preventDefault();
 
-    const ServiceCriado: Service = {
-      id: '',
-      name,
-      description,
-      service_type: tipo,
-      is_active: true,
+    const UpdateOrderService: UpdateServiceOrderDTO = {
+      ...serviceOrder,
+      id: serviceOrder.id,
+      customerId: clientId,
+      serviceId,
       price: Number(preco),
-      updatedAt: new Date(),
-      createdAt: new Date(),
+      status: serviceOrder.status,
+      startedAt: serviceOrder.startedAt,
+      finishedAt: serviceOrder.finishedAt,
     };
 
     try {
-      if (await registerService(ServiceCriado)) {
-        toast.success('Serviço criado com sucesso!');
-        // router.push('/client/listar');
-      } else {
-        toast.error('Error tente novamente');
-      }
-    } catch (e) {
-      toast.error('Erro tente novamente');
+      console.log(UpdateOrderService);
+      updateOrderService(UpdateOrderService);
+      toast.success('Atualizada com sucesso');
+    } catch (error) {
+      toast.error('Erro ao atualizar');
     }
   }
 
   return (
     <form
-      onSubmit={handleCriar}
+      onSubmit={handleUpdate}
       className="
         w-full max-w-[92vw] sm:max-w-2xl mx-auto
         flex flex-col
@@ -54,67 +77,23 @@ export function FormCriar() {
         {/* Cabeçalho */}
         <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
           <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
-            Novo serviço
+            Editar ordem de serviço
           </h1>
           <p className="text-sm text-gray-500 leading-relaxed">
-            Cadastre um novo serviço disponível no sistema.
+            Atualize o cliente, o serviço e o valor da ordem.
           </p>
         </div>
 
         {/* Campos */}
         <div className="flex flex-col gap-10 sm:gap-14">
-          {/* Nome */}
+          {/* Cliente */}
           <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
             <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
-              Nome do serviço
-            </label>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Ex: Desenvolvimento de site"
-              className="
-                bg-transparent
-                border-b border-gray-300
-                py-2 sm:py-2.5
-                text-base
-                focus:outline-none
-                focus:border-[#169545]
-                transition-colors
-              "
-            />
-          </div>
-
-          {/* Descrição */}
-          <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
-              Descrição
-            </label>
-            <input
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Descrição breve do serviço"
-              className="
-                bg-transparent
-                border-b border-gray-300
-                py-2 sm:py-2.5
-                text-base
-                focus:outline-none
-                focus:border-[#169545]
-                transition-colors
-              "
-            />
-          </div>
-
-          {/* Tipo */}
-          <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
-              Tipo do serviço
+              Cliente
             </label>
             <select
-              value={tipo}
-              onChange={(e) =>
-                setTipo(e.target.value as Service['service_type'])
-              }
+              value={clientId}
+              onChange={(e) => setClientId(e.target.value)}
               className="
                 bg-transparent
                 border-b border-gray-300
@@ -125,11 +104,39 @@ export function FormCriar() {
                 transition-colors
               "
             >
-              <option value="DESENVOLVIMENTO">Desenvolvimento</option>
-              <option value="MANUTENCAO">Manutenção Corretiva</option>
-              <option value="SUPORTE">Suporte Técnico</option>
-              <option value="CONSULTORIA">Consultoria</option>
-              <option value="HOSPEDAGEM">Hospedagem / Cloud</option>
+              <option value="">Selecione um cliente</option>
+              {clients.map((client) => (
+                <option key={client.id} value={client.id}>
+                  {client.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Serviço */}
+          <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+              Serviço
+            </label>
+            <select
+              value={serviceId}
+              onChange={(e) => setServiceId(e.target.value)}
+              className="
+                bg-transparent
+                border-b border-gray-300
+                py-2 sm:py-2.5
+                text-base
+                focus:outline-none
+                focus:border-[#169545]
+                transition-colors
+              "
+            >
+              <option value="">Selecione um serviço</option>
+              {services.map((service) => (
+                <option key={service.id} value={service.id}>
+                  {service.name}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -140,7 +147,7 @@ export function FormCriar() {
             </label>
             <input
               value={preco}
-              onChange={(e) => setPreco(e.target.value)}
+              onChange={(e) => setPreco(Number(e.target.value))}
               placeholder="0,00"
               className="
                 bg-transparent
@@ -169,7 +176,7 @@ export function FormCriar() {
               transition-opacity
             "
           >
-            Salvar serviço →
+            Salvar alterações →
           </button>
         </div>
       </div>

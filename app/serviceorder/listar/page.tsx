@@ -1,6 +1,7 @@
 import { listarserviceOrderPaginado } from '@/app/actions/service';
 import { Prisma } from '@prisma/client';
 import Link from 'next/link';
+import { DeleteForm } from '../deleteForm';
 
 export type ServiceOrderWithRelations = Prisma.ServiceOrderGetPayload<{
   include: {
@@ -9,107 +10,162 @@ export type ServiceOrderWithRelations = Prisma.ServiceOrderGetPayload<{
   };
 }>;
 
-export default async function ListarClientes() {
+export default async function ListarServiceOrder() {
   const resultado = await listarserviceOrderPaginado(1);
 
   return (
-    <div className="flex flex-col items-center min-h-screen justify-center bg-gray-50 py-12 px-6 gap-2">
-      <img className="w-xl" src="/logo.png" alt="" />
+    <div className="min-h-screen w-full flex items-center justify-center px-4">
+      {/* Container de leitura */}
+      <div className="w-full max-w-7xl flex flex-col gap-10 py-10">
+        {/* Cabeçalho */}
+        <div className="flex flex-col gap-2">
+          <h1 className="text-2xl font-semibold text-gray-900">
+            Ordens de Serviço
+          </h1>
+          <p className="text-sm text-gray-500">
+            Acompanhe as ordens de serviço criadas no sistema.
+          </p>
+        </div>
 
-      <div className="w-full mb-12 max-w-6xl bg-white shadow-2xl rounded-md border border-[#169545] overflow-hidden my-auto">
-        <div className="overflow-x-auto">
+        {/* Linha âncora */}
+        <div className="h-px bg-gray-200" />
+
+        {/* Lista */}
+        <div className="w-full overflow-x-auto">
           <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-[#169545] text-white">
-                <th className="p-4 font-semibold uppercase text-[10px] tracking-widest text-center">
-                  Preço
+            {/* Cabeçalho (apenas desktop) */}
+            <thead className="hidden sm:table-header-group">
+              <tr className="border-b border-gray-200">
+                <th className="py-3 text-left text-[10px] uppercase tracking-widest text-gray-400">
+                  Cliente / Serviço
                 </th>
-                <th className="p-4 font-semibold uppercase text-[10px] tracking-widest text-center">
+                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-400">
                   Status
                 </th>
-                <th className="p-4 font-semibold uppercase text-[10px] tracking-widest text-center">
-                  Início:
+                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-400">
+                  Início
                 </th>
-                <th className="p-4 font-semibold uppercase text-[10px] tracking-widest text-center">
-                  Terminado
+                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-400">
+                  Término
                 </th>
-                <th className="p-4 font-semibold uppercase text-[10px] tracking-widest text-center">
-                  Atualizada
+                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-400">
+                  Atualização
                 </th>
-                <th className="p-4 font-semibold uppercase text-[10px] tracking-widest text-center">
-                  Cliente
+                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-400">
+                  Preço
                 </th>
-                <th className="p-4 font-semibold uppercase text-[10px] tracking-widest text-center">
-                  Serviço
+                <th className="py-3 text-right text-[10px] uppercase tracking-widest text-gray-400">
+                  Ações
                 </th>
-                <th className="p-4 font-semibold uppercase text-[10px] tracking-widest text-center"></th>
               </tr>
             </thead>
 
             <tbody className="divide-y divide-gray-100">
-              {resultado.data.map(
-                (servicesOrder: ServiceOrderWithRelations) => (
-                  <tr
-                    key={servicesOrder.id}
-                    className="hover:bg-gray-50 transition-colors"
-                  >
-                    <td className="p-4 text-center">
-                      <div className="flex flex-col">
-                        <span className="text-gray-800 font-bold text-sm">
-                          {servicesOrder.price}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="p-4 text-center">
-                      <span className="inline-block px-2 py-0.5 text-[9px] font-black rounded-sm bg-gray-200 text-gray-600">
-                        {servicesOrder.status}
+              {resultado.data.map((order: ServiceOrderWithRelations) => (
+                <tr
+                  key={order.id}
+                  className="
+                    block sm:table-row
+                    border border-gray-200 sm:border-0
+                    rounded-lg sm:rounded-none
+                    p-4 sm:p-0
+                    mb-4 sm:mb-0
+                    hover:bg-gray-50
+                    transition-colors
+                  "
+                >
+                  {/* Cliente / Serviço */}
+                  <td className="block sm:table-cell py-2 sm:py-4">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-gray-900 font-medium text-sm">
+                        {order.customer?.name}
                       </span>
-                    </td>
-                    <td className="p-4 text-gray-500 font-mono text-xs text-center">
-                      {servicesOrder.startedAt?.toLocaleDateString('pt-br') ||
-                        ''}
-                    </td>
-                    <td className="p-4 text-gray-500 font-mono text-xs text-center">
-                      {servicesOrder.finishedAt?.toLocaleDateString('pt-br') ||
-                        'Não terminou'}
-                    </td>
-                    <td className="p-4 text-gray-500 font-mono text-xs text-center">
-                      {servicesOrder.updatedAt?.toLocaleDateString('pt-br') ||
-                        'Não houve atualizações'}
-                    </td>
-                    <td className="p-4 text-gray-500 font-mono text-xs text-center">
-                      {servicesOrder?.customer?.name}
-                    </td>
-                    <td className="p-4 text-gray-500 font-mono text-xs text-center">
-                      {servicesOrder?.service?.name}
-                    </td>
+                      <span className="text-gray-400 text-xs">
+                        {order.service?.name}
+                      </span>
+                    </div>
+                  </td>
 
-                    <td className="p-4 text-center">
-                      <div className="flex items-center justify-center gap-4">
-                        <Link
-                          href={`/client/editar/${servicesOrder.id}`}
-                          className="text-[#169545] hover:scale-110 transition-transform text-[11px] font-bold underline"
-                        >
-                          EDITAR
-                        </Link>
-                        {/* <DeleteForm idCliente={servicesOrder.id} /> */}
-                      </div>
-                    </td>
-                  </tr>
-                ),
-              )}
+                  {/* Status */}
+                  <td className="block sm:table-cell py-1 sm:py-4 text-left sm:text-center">
+                    <span className="sm:hidden text-[10px] uppercase text-gray-400">
+                      Status
+                    </span>
+                    <span className="text-sm font-semibold text-gray-700">
+                      {order.status}
+                    </span>
+                  </td>
+
+                  {/* Início */}
+                  <td className="block sm:table-cell py-1 sm:py-4 text-left sm:text-center">
+                    <span className="sm:hidden text-[10px] uppercase text-gray-400">
+                      Início
+                    </span>
+                    <span className="font-mono text-xs text-gray-600">
+                      {order.startedAt?.toLocaleDateString('pt-BR')}
+                    </span>
+                  </td>
+
+                  {/* Término */}
+                  <td className="block sm:table-cell py-1 sm:py-4 text-left sm:text-center">
+                    <span className="sm:hidden text-[10px] uppercase text-gray-400">
+                      Término
+                    </span>
+                    <span className="font-mono text-xs text-gray-600">
+                      {order.finishedAt
+                        ? order.finishedAt.toLocaleDateString('pt-BR')
+                        : 'Não finalizada'}
+                    </span>
+                  </td>
+
+                  {/* Atualização */}
+                  <td className="block sm:table-cell py-1 sm:py-4 text-left sm:text-center">
+                    <span className="sm:hidden text-[10px] uppercase text-gray-400">
+                      Atualização
+                    </span>
+                    <span className="font-mono text-xs text-gray-600">
+                      {order.updatedAt.toLocaleDateString('pt-BR')}
+                    </span>
+                  </td>
+
+                  {/* Preço */}
+                  <td className="block sm:table-cell py-1 sm:py-4 text-left sm:text-center">
+                    <span className="sm:hidden text-[10px] uppercase text-gray-400">
+                      Preço
+                    </span>
+                    <span className="text-sm font-semibold text-gray-900">
+                      {order.price}
+                    </span>
+                  </td>
+
+                  {/* Ações */}
+                  <td className="block sm:table-cell pt-4 sm:pt-4">
+                    <div className="flex gap-6 sm:justify-end">
+                      <Link
+                        href={`/serviceorder/editar/${order.id}`}
+                        className="text-sm font-semibold text-[#169545] hover:underline"
+                      >
+                        Editar
+                      </Link>
+                      <DeleteForm idCliente={order.id} />
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
-      </div>
 
-      {/* Margem automática no topo deste link para empurrá-lo para o fim da página se necessário */}
-      <a
-        href="#"
-        className="mt-auto pt-20 text-gray-400 hover:text-[#169545] text-xs font-semibold uppercase tracking-widest transition-all"
-      >
-        ← Voltar ao Início
-      </a>
+        {/* Rodapé */}
+        <div className="pt-6">
+          <Link
+            href="/"
+            className="text-xs uppercase tracking-widest text-gray-400 hover:text-[#169545]"
+          >
+            ← Voltar ao início
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
