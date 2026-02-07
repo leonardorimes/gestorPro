@@ -15,9 +15,6 @@ import ListarClientes from '@/app/client/listar/page';
 import { listAllClients } from '@/app/actions/client';
 
 export default function FormCriar() {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [tipo, setTipo] = useState<TipoServico>('DESENVOLVIMENTO');
   const [preco, setPreco] = useState('');
   const [services, setServices] = useState<PrismaService[]>([]);
   const [serviceId, setServiceId] = useState('');

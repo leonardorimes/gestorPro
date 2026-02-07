@@ -3,6 +3,7 @@
 import { prisma } from '@/lib/prisma';
 import { Service, ServiceOrder, TipoServico } from '../types/ServiceTypes';
 import { Service as ServicePrisma } from '@prisma/client';
+import { ServiceOrderWithRelations } from '../serviceorder/listar/page';
 
 export async function registerService(formData: Service) {
   const serviceName = formData.name;
@@ -199,4 +200,38 @@ export async function listarserviceOrderPaginado(page: number) {
       totalPages: Math.ceil(total / take),
     },
   };
+}
+
+export async function encontrarServiceOrder(id: string) {
+  const serviceOrder = await prisma.serviceOrder.findUnique({
+    where: { id: id },
+  });
+
+  if (!serviceOrder) {
+    throw new Error('ERRO_AO_ECONTRAR_ORDER');
+  }
+
+  return serviceOrder;
+}
+
+export async function updateOrderService(order: ServiceOrderWithRelations) {
+  const serviceOrder = await prisma.serviceOrder.update({
+    where: { id: order.id },
+    data: {
+      price: order.price,
+      status: order.status,
+      startedAt: order.startedAt,
+      finishedAt: order.finishedAt ?? null,
+
+      customer: {
+        connect: { id: order.customerId },
+      },
+
+      service: {
+        connect: { id: order.serviceId },
+      },
+    },
+  });
+
+  return serviceOrder;
 }

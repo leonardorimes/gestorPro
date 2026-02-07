@@ -1,5 +1,6 @@
 import { listarserviceOrderPaginado } from '@/app/actions/service';
 import { Prisma } from '@prisma/client';
+import Link from 'next/link';
 
 export type ServiceOrderWithRelations = Prisma.ServiceOrderGetPayload<{
   include: {
@@ -41,6 +42,7 @@ export default async function ListarClientes() {
                 <th className="p-4 font-semibold uppercase text-[10px] tracking-widest text-center">
                   Serviço
                 </th>
+                <th className="p-4 font-semibold uppercase text-[10px] tracking-widest text-center"></th>
               </tr>
             </thead>
 
@@ -84,13 +86,13 @@ export default async function ListarClientes() {
 
                     <td className="p-4 text-center">
                       <div className="flex items-center justify-center gap-4">
-                        {/* <Link
-                        href={`/client/editar/${servicesOrder.id}`}
-                        className="text-[#169545] hover:scale-110 transition-transform text-[11px] font-bold underline"
-                      >
-                        EDITAR
-                      </Link>
-                      <DeleteForm idCliente={servicesOrder.id} /> */}
+                        <Link
+                          href={`/client/editar/${servicesOrder.id}`}
+                          className="text-[#169545] hover:scale-110 transition-transform text-[11px] font-bold underline"
+                        >
+                          EDITAR
+                        </Link>
+                        {/* <DeleteForm idCliente={servicesOrder.id} /> */}
                       </div>
                     </td>
                   </tr>
