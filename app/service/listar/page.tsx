@@ -3,33 +3,44 @@ import { Service } from '@/app/types/ServiceTypes';
 import Link from 'next/link';
 import { DeleteForm } from '../components/deleteForm';
 
-export default async function ListarClientes() {
+export default async function ListarServicos() {
   const resultado = await listService(1);
-  console.log(resultado);
 
   return (
-    <div className="flex flex-col items-center min-h-screen justify-center bg-gray-50 py-12 px-6 gap-2">
-      <img className="w-xl" src="/logo.png" alt="" />
+    <div className="min-h-screen w-full flex items-center justify-center px-4">
+      {/* Container */}
+      <div className="w-full max-w-6xl flex flex-col gap-10 py-10">
+        {/* Cabeçalho */}
+        <div className="flex flex-col gap-2">
+          <h1 className="text-2xl font-semibold text-gray-900">Serviços</h1>
+          <p className="text-sm text-gray-500">
+            Lista de serviços cadastrados no sistema.
+          </p>
+        </div>
 
-      <div className="w-full mb-12 max-w-6xl bg-white shadow-2xl rounded-md border border-[#169545] overflow-hidden my-auto">
-        <div className="overflow-x-auto">
+        {/* Linha de separação */}
+        <div className="h-px bg-gray-200" />
+
+        {/* Tabela */}
+        <div className="w-full overflow-x-auto">
           <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-[#169545] text-white">
-                <th className="p-4 font-semibold uppercase text-[10px] tracking-widest text-center">
+            {/* Cabeçalho (desktop) */}
+            <thead className="hidden sm:table-header-group">
+              <tr className="border-b border-gray-200">
+                <th className="py-3 text-left text-[10px] uppercase tracking-widest text-gray-400">
                   Serviço
                 </th>
-                <th className="p-4 font-semibold uppercase text-[10px] tracking-widest text-center">
-                  Descrição
+                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-400">
+                  Tipo
                 </th>
-                <th className="p-4 font-semibold uppercase text-[10px] tracking-widest text-center">
-                  Tipo de serviço
+                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-400">
+                  Preço
                 </th>
-                <th className="p-4 font-semibold uppercase text-[10px] tracking-widest text-center">
+                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-400">
                   Status
                 </th>
-                <th className="p-4 font-semibold uppercase text-[10px] tracking-widest text-center">
-                  preço
+                <th className="py-3 text-right text-[10px] uppercase tracking-widest text-gray-400">
+                  Ações
                 </th>
               </tr>
             </thead>
@@ -37,61 +48,70 @@ export default async function ListarClientes() {
             <tbody className="divide-y divide-gray-100">
               {resultado.data.map((service: Service) => (
                 <tr
-                  key={service.name}
+                  key={service.id}
                   className="hover:bg-gray-50 transition-colors"
                 >
-                  <td className="p-4 text-center">
+                  {/* Serviço */}
+                  <td className="py-4">
                     <div className="flex flex-col">
-                      <span className="text-gray-800 font-bold text-sm">
+                      <span className="text-gray-900 font-medium text-sm">
                         {service.name}
                       </span>
-                      <span className="text-gray-400 text-[11px]">
+                      <span className="text-gray-400 text-xs">
                         {service.description}
                       </span>
                     </div>
                   </td>
-                  <td className="p-4 text-center">
-                    <span className="inline-block px-2 py-0.5 text-[9px] font-black rounded-sm bg-gray-200 text-gray-600">
-                      {service.service_type}
-                    </span>
+
+                  {/* Tipo */}
+                  <td className="py-4 text-center text-sm text-gray-600">
+                    {service.service_type}
                   </td>
-                  <td className="p-4 text-gray-500 font-mono text-xs text-center">
+
+                  {/* Preço */}
+                  <td className="py-4 text-center font-mono text-xs text-gray-600">
                     {service.price}
                   </td>
-                  <td className="p-4 text-center">
+
+                  {/* Status */}
+                  <td className="py-4 text-center">
                     <span
-                      className={`text-[10px] font-black ${service.is_active ? 'text-[#169545]' : 'text-red-500'}`}
+                      className={`text-xs font-semibold ${
+                        service.is_active ? 'text-[#169545]' : 'text-red-500'
+                      }`}
                     >
-                      {service.is_active ? 'ATIVO' : 'INATIVO'}
+                      {service.is_active ? 'Ativo' : 'Inativo'}
                     </span>
                   </td>
-                  <td className="p-4 text-center">
-                    <div className="flex items-center justify-center gap-4">
+
+                  {/* Ações */}
+                  <td className="py-4 text-right">
+                    <div className="inline-flex gap-4">
                       <Link
                         href={`/service/editar/${service.id}`}
-                        className="text-[#169545] hover:scale-110 transition-transform text-[11px] font-bold underline"
+                        className="text-sm font-medium text-[#169545] hover:underline"
                       >
-                        EDITAR
+                        Editar
                       </Link>
                       <DeleteForm idService={service.id} />
                     </div>
-                  </td> 
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+
+        {/* Rodapé */}
+        <div className="pt-6">
+          <Link
+            href="/"
+            className="text-xs uppercase tracking-widest text-gray-400 hover:text-[#169545]"
+          >
+            ← Voltar ao início
+          </Link>
+        </div>
       </div>
-
-
-      <a
-        href="#"
-        className="mt-auto pt-20 text-gray-400 hover:text-[#169545] text-xs font-semibold uppercase tracking-widest transition-all"
-      >
-        ← Voltar ao Início
-      </a>
     </div>
   );
 }
-
-// 10 clientes

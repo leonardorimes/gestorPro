@@ -1,145 +1,213 @@
-import Link from "next/link";
+import Link from 'next/link';
+import { MetricCard } from './_components/MetricCard';
+import { OpenServices } from './actions/service';
 
-export default function Dashboard() {
+export default async function Dashboard() {
+  const totalOpenServices = await handleTotalOpenServices();
   return (
-    <div className="min-h-screen w-full flex justify-center px-4 py-10">
-      <div className="w-full max-w-7xl flex flex-col gap-16">
-        {/* Cabeçalho */}
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">
-            Dashboard
-          </h1>
-          <p className="text-sm text-gray-500">
-            Visão geral do sistema e ações rápidas.
-          </p>
+    <div className="min-h-screen w-full bg-gray-100">
+      {/* Header fixo */}
+      <div className="bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-[1400px] mx-auto px-6 py-4">
+          <h1 className="text-2xl font-bold text-[#169545]">GESTORPRO</h1>
         </div>
+      </div>
 
-        {/* AÇÕES */}
-        <SectionTitle title="Ações rápidas" />
-        <Grid cols="lg:grid-cols-3">
-          <ActionCard
-            title="Clientes"
-            description="Gerencie seus clientes"
-            actions={[
-              { label: "Criar cliente", href: "/client/criar", primary: true },
-              { label: "Listar clientes", href: "/client/listar" },
-            ]}
-          />
+      {/* Conteúdo */}
+      <div className="max-w-[1400px] mx-auto px-6 py-8">
+        <div className="flex flex-col gap-8">
+          {/* Título da página */}
+          <div className="flex flex-col gap-2">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900">
+              Dashboard
+            </h2>
+            <p className="text-sm text-gray-600">
+              Visão geral do sistema e ações rápidas.
+            </p>
+          </div>
 
-          <ActionCard
-            title="Serviços"
-            description="Catálogo de serviços"
-            actions={[
-              { label: "Criar serviço", href: "/service/criar", primary: true },
-              { label: "Listar serviços", href: "/service/listar" },
-            ]}
-          />
+          {/* AÇÕES */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Ações rápidas
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <ActionCard
+                title="Clientes"
+                description="Gerencie seus clientes"
+                actions={[
+                  {
+                    label: 'Criar cliente',
+                    href: '/client',
+                    primary: true,
+                  },
+                  { label: 'Listar clientes', href: '/client/listar' },
+                ]}
+              />
 
-          <ActionCard
-            title="Ordens de serviço"
-            description="Controle operacional"
-            actions={[
-              { label: "Criar ordem", href: "/serviceorder/criar", primary: true },
-              { label: "Listar ordens", href: "/serviceorder/listar" },
-            ]}
-          />
-        </Grid>
+              <ActionCard
+                title="Serviços"
+                description="Catálogo de serviços"
+                actions={[
+                  {
+                    label: 'Criar serviço',
+                    href: '/service',
+                    primary: true,
+                  },
+                  { label: 'Listar serviços', href: '/service/listar' },
+                ]}
+              />
 
-        {/* ORDENS */}
-        <SectionTitle title="Ordens de serviço" />
-        <Grid>
-          <KpiCard title="Em aberto" value="12" description="OPEN" highlight />
-          <KpiCard title="Em andamento" value="7" description="IN_PROGRESS" />
-          <KpiCard title="Finalizadas" value="34" description="COMPLETED" />
-          <KpiCard title="Canceladas" value="3" description="CANCELED" />
-        </Grid>
+              <ActionCard
+                title="Ordens de serviço"
+                description="Controle operacional"
+                actions={[
+                  {
+                    label: 'Criar ordem',
+                    href: '/serviceorder',
+                    primary: true,
+                  },
+                  { label: 'Listar ordens', href: '/serviceorder/listar' },
+                ]}
+              />
+            </div>
+          </div>
 
-        {/* CLIENTES */}
-        <SectionTitle title="Clientes" />
-        <Grid>
-          <KpiCard title="Clientes totais" value="58" description="Cadastrados" />
-          <KpiCard title="Clientes ativos" value="51" description="Ativos" />
-          <KpiCard title="Pessoa física" value="41" description="PF" />
-          <KpiCard title="Pessoa jurídica" value="17" description="PJ" />
-        </Grid>
+          {/* ORDENS DE SERVIÇO */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Ordens de serviço
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <MetricCard
+                label="Em aberto"
+                value={totalOpenServices.toString()}
+                subtitle="OPEN"
+                color="blue"
+              />
+              <MetricCard
+                label="Em andamento"
+                value="7"
+                subtitle="IN_PROGRESS"
+                color="yellow"
+              />
+              <MetricCard
+                label="Finalizadas"
+                value="34"
+                subtitle="COMPLETED"
+                color="green"
+              />
+              <MetricCard
+                label="Canceladas"
+                value="3"
+                subtitle="CANCELED"
+                color="red"
+              />
+            </div>
+          </div>
 
-        {/* FINANCEIRO */}
-        <SectionTitle title="Financeiro" />
-        <Grid cols="lg:grid-cols-3">
-          <KpiCard title="Faturamento total" value="R$ 124.800" description="Concluídas" />
-          <KpiCard
-            title="Faturamento do mês"
-            value="R$ 18.400"
-            description="Mês atual"
-            highlight
-          />
-          <KpiCard title="Ticket médio" value="R$ 3.670" description="Por ordem" />
-        </Grid>
+          {/* CLIENTES */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Clientes
+            </h3>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Cards de métricas */}
+              <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <MetricCard
+                  label="Clientes totais"
+                  value="58"
+                  subtitle="Cadastrados"
+                  color="purple"
+                />
+                <MetricCard
+                  label="Clientes ativos"
+                  value="51"
+                  subtitle="Ativos"
+                  color="green"
+                />
+                <MetricCard
+                  label="Pessoa física"
+                  value="41"
+                  subtitle="PF"
+                  color="blue"
+                />
+                <MetricCard
+                  label="Pessoa jurídica"
+                  value="17"
+                  subtitle="PJ"
+                  color="indigo"
+                />
+              </div>
 
-        
+              {/* Gráfico de pizza */}
+              <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-6 flex flex-col">
+                <h4 className="text-base font-semibold text-gray-900 mb-6">
+                  Distribuição por tipo
+                </h4>
+                <div className="flex-1 flex items-center justify-center">
+                  <PieChart pf={41} pj={17} />
+                </div>
+                <div className="grid grid-cols-2 gap-4 mt-6 pt-4 border-t border-gray-100">
+                  <div className="text-center">
+                    <div className="flex items-center justify-center gap-2 mb-1">
+                      <div className="w-3 h-3 rounded-full bg-[#169545]"></div>
+                      <span className="text-xs font-medium text-gray-600">
+                        Pessoa Física
+                      </span>
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900">41</p>
+                    <p className="text-xs text-gray-500 mt-1">70.7%</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="flex items-center justify-center gap-2 mb-1">
+                      <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                      <span className="text-xs font-medium text-gray-600">
+                        Pessoa Jurídica
+                      </span>
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900">17</p>
+                    <p className="text-xs text-gray-500 mt-1">29.3%</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* FINANCEIRO */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Financeiro
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <MetricCard
+                label="Faturamento total"
+                value="R$ 124.800"
+                subtitle="Concluídas"
+                color="green"
+              />
+              <MetricCard
+                label="Faturamento do mês"
+                value="R$ 18.400"
+                subtitle="Mês atual"
+                color="emerald"
+                highlight
+              />
+              <MetricCard
+                label="Ticket médio"
+                value="R$ 3.670"
+                subtitle="Por ordem"
+                color="teal"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
 /* ---------- COMPONENTES ---------- */
-
-function SectionTitle({ title }: { title: string }) {
-  return (
-    <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
-      {title}
-    </h2>
-  );
-}
-
-function Grid({
-  children,
-  cols = "lg:grid-cols-4",
-}: {
-  children: React.ReactNode;
-  cols?: string;
-}) {
-  return (
-    <div className={`grid grid-cols-1 sm:grid-cols-2 ${cols} gap-6`}>
-      {children}
-    </div>
-  );
-}
-
-function KpiCard({
-  title,
-  value,
-  description,
-  highlight = false,
-}: {
-  title: string;
-  value: string;
-  description: string;
-  highlight?: boolean;
-}) {
-  return (
-    <div
-      className={`
-        rounded-xl border p-5 flex flex-col gap-2
-        ${
-          highlight
-            ? "border-[#169545] bg-[#169545]/5"
-            : "border-gray-200 bg-white"
-        }
-      `}
-    >
-      <span className="text-[11px] uppercase tracking-widest text-gray-400">
-        {title}
-      </span>
-      <span className="text-2xl sm:text-3xl font-semibold text-gray-900">
-        {value}
-      </span>
-      <span className="text-sm text-gray-500">
-        {description}
-      </span>
-    </div>
-  );
-}
 
 function ActionCard({
   title,
@@ -151,28 +219,24 @@ function ActionCard({
   actions: { label: string; href: string; primary?: boolean }[];
 }) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-5 flex flex-col gap-4">
+    <div className="rounded-2xl border border-gray-200 bg-white shadow-md p-6 flex flex-col gap-4 hover:shadow-lg transition-shadow">
       <div className="flex flex-col gap-1">
-        <h3 className="text-base font-semibold text-gray-900">
-          {title}
-        </h3>
-        <p className="text-sm text-gray-500">
-          {description}
-        </p>
+        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+        <p className="text-sm text-gray-600">{description}</p>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 mt-2">
         {actions.map((action) => (
           <Link
             key={action.href}
             href={action.href}
             className={`
-              px-4 py-3 rounded-lg text-sm font-semibold text-center
-              transition-colors
+              px-5 py-3 rounded-xl text-sm font-semibold text-center
+              transition-all
               ${
                 action.primary
-                  ? "bg-[#169545] text-white hover:opacity-90"
-                  : "border border-gray-300 text-gray-700 hover:bg-gray-50"
+                  ? 'bg-[#169545] text-white hover:bg-[#147a3a] shadow-sm'
+                  : 'border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400'
               }
             `}
           >
@@ -182,4 +246,90 @@ function ActionCard({
       </div>
     </div>
   );
+}
+
+function PieChart({ pf, pj }: { pf: number; pj: number }) {
+  const total = pf + pj;
+  const pfPercentage = (pf / total) * 100;
+  const pfAngle = (pfPercentage / 100) * 360;
+
+  // Calcular o path do arco para PF
+  const radius = 80;
+  const centerX = 100;
+  const centerY = 100;
+
+  const startAngle = -90; // Começa no topo
+  const endAngle = startAngle + pfAngle;
+
+  const startX = centerX + radius * Math.cos((startAngle * Math.PI) / 180);
+  const startY = centerY + radius * Math.sin((startAngle * Math.PI) / 180);
+  const endX = centerX + radius * Math.cos((endAngle * Math.PI) / 180);
+  const endY = centerY + radius * Math.sin((endAngle * Math.PI) / 180);
+
+  const largeArcFlag = pfAngle > 180 ? 1 : 0;
+
+  const pfPath = [
+    `M ${centerX} ${centerY}`,
+    `L ${startX} ${startY}`,
+    `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${endX} ${endY}`,
+    'Z',
+  ].join(' ');
+
+  // Path para PJ (resto do círculo)
+  const pjStartX = endX;
+  const pjStartY = endY;
+  const pjEndX = startX;
+  const pjEndY = startY;
+  const pjAngle = 360 - pfAngle;
+  const pjLargeArcFlag = pjAngle > 180 ? 1 : 0;
+
+  const pjPath = [
+    `M ${centerX} ${centerY}`,
+    `L ${pjStartX} ${pjStartY}`,
+    `A ${radius} ${radius} 0 ${pjLargeArcFlag} 1 ${pjEndX} ${pjEndY}`,
+    'Z',
+  ].join(' ');
+
+  return (
+    <div className="relative w-52 h-52">
+      <svg viewBox="0 0 200 200" className="w-full h-full">
+        {/* PF slice */}
+        <path
+          d={pfPath}
+          fill="#169545"
+          className="transition-all duration-300 hover:opacity-80 cursor-pointer"
+        />
+        {/* PJ slice */}
+        <path
+          d={pjPath}
+          fill="#3b82f6"
+          className="transition-all duration-300 hover:opacity-80 cursor-pointer"
+        />
+        {/* Centro branco */}
+        <circle cx={centerX} cy={centerY} r="50" fill="white" />
+        {/* Texto central */}
+        <text
+          x={centerX}
+          y={centerY - 8}
+          textAnchor="middle"
+          className="text-3xl font-bold fill-gray-900"
+        >
+          {total}
+        </text>
+        <text
+          x={centerX}
+          y={centerY + 15}
+          textAnchor="middle"
+          className="text-sm fill-gray-600 font-medium"
+        >
+          Total
+        </text>
+      </svg>
+    </div>
+  );
+}
+
+async function handleTotalOpenServices() {
+  const totalOpenServices = await OpenServices();
+  return totalOpenServices;
 }

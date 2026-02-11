@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { listarClientePaginado } from "../../actions/client";
-import { Client } from "@/app/types/ClientTypes";
-import { DeleteForm } from "../components/deleteForm";
+import Link from 'next/link';
+import { listarClientePaginado } from '../../actions/client';
+import { Client } from '@/app/types/ClientTypes';
+import { DeleteForm } from '../components/deleteForm';
 
 export default async function ListarClientes() {
   const resultado = await listarClientePaginado(1);
@@ -12,9 +12,7 @@ export default async function ListarClientes() {
       <div className="w-full max-w-6xl flex flex-col gap-10 py-10">
         {/* Cabeçalho */}
         <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-semibold text-gray-900">
-            Clientes
-          </h1>
+          <h1 className="text-2xl font-semibold text-gray-900">Clientes</h1>
           <p className="text-sm text-gray-500">
             Lista de clientes cadastrados no sistema.
           </p>
@@ -78,12 +76,10 @@ export default async function ListarClientes() {
                   <td className="py-4 text-center">
                     <span
                       className={`text-xs font-semibold ${
-                        cliente.isActive
-                          ? "text-[#169545]"
-                          : "text-red-500"
+                        cliente.isActive ? 'text-[#169545]' : 'text-red-500'
                       }`}
                     >
-                      {cliente.isActive ? "Ativo" : "Inativo"}
+                      {cliente.isActive ? 'Ativo' : 'Inativo'}
                     </span>
                   </td>
 
