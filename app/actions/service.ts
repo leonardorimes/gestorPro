@@ -265,5 +265,61 @@ export async function OpenServices() {
     },
   });
 
+  return numberOfOpenService.toString();
+}
+
+export async function InProgressServices() {
+  const numberOfOpenService = await prisma.serviceOrder.count({
+    where: {
+      status: 'IN_PROGRESS',
+    },
+  });
+
   return numberOfOpenService;
+}
+
+export async function CompletedServices() {
+  const numberOfCompletedService = await prisma.serviceOrder.count({
+    where: {
+      status: 'COMPLETED',
+    },
+  });
+
+  return numberOfCompletedService;
+}
+
+export async function CanceledServices() {
+  const numberOfCanceledServices = await prisma.serviceOrder.count({
+    where: {
+      status: 'CANCELED',
+    },
+  });
+
+  return numberOfCanceledServices;
+}
+
+export async function totalValueServices() {
+  const total = await prisma.serviceOrder.aggregate({
+    _sum: {
+      price: true,
+    },
+    where: {
+      status: 'COMPLETED',
+    },
+  });
+
+  return total;
+}
+
+export async function TicketServices() {
+  const avg = await prisma.serviceOrder.aggregate({
+    _avg: {
+      price: true,
+    },
+    where: {
+      status: 'COMPLETED',
+    },
+  });
+
+  return avg;
 }

@@ -137,3 +137,33 @@ export async function listAllClients() {
 
   return clients;
 }
+
+export async function TotalClients() {
+  const numberOfClients = await prisma.serviceOrder.count();
+
+  return numberOfClients;
+}
+
+export async function TotalActiveClients() {
+  const numberOfActiveClients = await prisma.client.count({
+    where: { isActive: true },
+  });
+
+  return numberOfActiveClients;
+}
+
+export async function TotalPFClients() {
+  const numberOfActiveClients = await prisma.client.count({
+    where: { tipo: 'FISICA' },
+  });
+
+  return numberOfActiveClients;
+}
+
+export async function TotalPJClients() {
+  const numberOfActiveClients = await prisma.client.count({
+    where: { tipo: 'JURIDICA' },
+  });
+
+  return numberOfActiveClients;
+}

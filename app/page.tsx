@@ -1,9 +1,36 @@
 import Link from 'next/link';
 import { MetricCard } from './_components/MetricCard';
-import { OpenServices } from './actions/service';
+import {
+  CanceledServices,
+  CompletedServices,
+  InProgressServices,
+  OpenServices,
+  TicketServices,
+  totalValueServices,
+} from './actions/service';
+
+import {
+  TotalActiveClients,
+  TotalClients,
+  TotalPFClients,
+  TotalPJClients,
+} from './actions/client';
 
 export default async function Dashboard() {
   const totalOpenServices = await handleTotalOpenServices();
+  const totalInprogressServices = await InProgressServices();
+  const totalCompletedServices = await CompletedServices();
+  const totalCanceledServices = await CanceledServices();
+
+  const totalClients = await TotalClients();
+  const totalActiveClients = await TotalActiveClients();
+  const totalPFClients = await TotalPFClients();
+  const totalPJClients = await TotalPJClients();
+
+  const totalValue = (await totalValueServices())._sum.price;
+  const avgValue = (await TicketServices())._avg.price;
+  console.log(avgValue);
+
   return (
     <div className="min-h-screen w-full bg-gray-100">
       {/* Header fixo */}
@@ -87,19 +114,19 @@ export default async function Dashboard() {
               />
               <MetricCard
                 label="Em andamento"
-                value="7"
+                value={totalInprogressServices.toString()}
                 subtitle="IN_PROGRESS"
                 color="yellow"
               />
               <MetricCard
                 label="Finalizadas"
-                value="34"
+                value={totalCompletedServices.toString()}
                 subtitle="COMPLETED"
                 color="green"
               />
               <MetricCard
                 label="Canceladas"
-                value="3"
+                value={totalCanceledServices.toString()}
                 subtitle="CANCELED"
                 color="red"
               />
@@ -116,25 +143,25 @@ export default async function Dashboard() {
               <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <MetricCard
                   label="Clientes totais"
-                  value="58"
+                  value={totalClients.toString()}
                   subtitle="Cadastrados"
                   color="purple"
                 />
                 <MetricCard
                   label="Clientes ativos"
-                  value="51"
+                  value={totalActiveClients.toString()}
                   subtitle="Ativos"
                   color="green"
                 />
                 <MetricCard
                   label="Pessoa física"
-                  value="41"
+                  value={totalPFClients.toString()}
                   subtitle="PF"
                   color="blue"
                 />
                 <MetricCard
                   label="Pessoa jurídica"
-                  value="17"
+                  value={totalPJClients.toString()}
                   subtitle="PJ"
                   color="indigo"
                 />
@@ -146,7 +173,7 @@ export default async function Dashboard() {
                   Distribuição por tipo
                 </h4>
                 <div className="flex-1 flex items-center justify-center">
-                  <PieChart pf={41} pj={17} />
+                  <PieChart pf={totalPFClients} pj={totalPJClients} />
                 </div>
                 <div className="grid grid-cols-2 gap-4 mt-6 pt-4 border-t border-gray-100">
                   <div className="text-center">
@@ -156,8 +183,14 @@ export default async function Dashboard() {
                         Pessoa Física
                       </span>
                     </div>
-                    <p className="text-2xl font-bold text-gray-900">41</p>
-                    <p className="text-xs text-gray-500 mt-1">70.7%</p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {totalPFClients}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {(totalPFClients / (totalPJClients + totalPFClients)) *
+                        100}
+                      %
+                    </p>
                   </div>
                   <div className="text-center">
                     <div className="flex items-center justify-center gap-2 mb-1">
@@ -166,8 +199,15 @@ export default async function Dashboard() {
                         Pessoa Jurídica
                       </span>
                     </div>
-                    <p className="text-2xl font-bold text-gray-900">17</p>
-                    <p className="text-xs text-gray-500 mt-1">29.3%</p>
+                    <p className="text-2xl font-bold text-gray-900">
+                      {totalPJClients}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {' '}
+                      {(totalPJClients / (totalPJClients + totalPFClients)) *
+                        100}
+                      %
+                    </p>
                   </div>
                 </div>
               </div>
@@ -182,7 +222,7 @@ export default async function Dashboard() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <MetricCard
                 label="Faturamento total"
-                value="R$ 124.800"
+                value={totalValue.toString()}
                 subtitle="Concluídas"
                 color="green"
               />
@@ -195,7 +235,7 @@ export default async function Dashboard() {
               />
               <MetricCard
                 label="Ticket médio"
-                value="R$ 3.670"
+                value={avgValue.toString()}
                 subtitle="Por ordem"
                 color="teal"
               />
