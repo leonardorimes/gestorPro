@@ -6,6 +6,7 @@ import {
   InProgressServices,
   OpenServices,
   TicketServices,
+  totalMonthlyRevenue,
   totalValueServices,
 } from './actions/service';
 
@@ -29,7 +30,9 @@ export default async function Dashboard() {
 
   const totalValue = (await totalValueServices())._sum.price;
   const avgValue = (await TicketServices())._avg.price;
-  console.log(avgValue);
+  const monthTotal = (await totalMonthlyRevenue())._sum.price
+
+ 
 
   return (
     <div className="min-h-screen w-full bg-gray-100">
@@ -108,25 +111,25 @@ export default async function Dashboard() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <MetricCard
                 label="Em aberto"
-                value={totalOpenServices.toString()}
+                value={(totalOpenServices || 0).toString() }
                 subtitle="OPEN"
                 color="blue"
               />
               <MetricCard
                 label="Em andamento"
-                value={totalInprogressServices.toString()}
+                value={(totalInprogressServices || 0).toString()}
                 subtitle="IN_PROGRESS"
                 color="yellow"
               />
               <MetricCard
                 label="Finalizadas"
-                value={totalCompletedServices.toString()}
+                value={(totalCompletedServices || 0).toString()}
                 subtitle="COMPLETED"
                 color="green"
               />
               <MetricCard
                 label="Canceladas"
-                value={totalCanceledServices.toString()}
+                value={(totalCanceledServices || 0).toString()}
                 subtitle="CANCELED"
                 color="red"
               />
@@ -143,25 +146,25 @@ export default async function Dashboard() {
               <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <MetricCard
                   label="Clientes totais"
-                  value={totalClients.toString()}
+                  value={(totalClients || 0).toString()}
                   subtitle="Cadastrados"
                   color="purple"
                 />
                 <MetricCard
                   label="Clientes ativos"
-                  value={totalActiveClients.toString()}
+                  value={(totalActiveClients || 0).toString()}
                   subtitle="Ativos"
                   color="green"
                 />
                 <MetricCard
                   label="Pessoa física"
-                  value={totalPFClients.toString()}
+                  value={(totalPFClients || 0).toString()}
                   subtitle="PF"
                   color="blue"
                 />
                 <MetricCard
                   label="Pessoa jurídica"
-                  value={totalPJClients.toString()}
+                  value={(totalPJClients || 0).toString()}
                   subtitle="PJ"
                   color="indigo"
                 />
@@ -222,20 +225,29 @@ export default async function Dashboard() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <MetricCard
                 label="Faturamento total"
-                value={totalValue.toString()}
+                value={(totalValue?? 0).toLocaleString('pt-BR', {
+                  style: "currency",
+                  currency: 'BRL'
+                })}
                 subtitle="Concluídas"
                 color="green"
               />
               <MetricCard
                 label="Faturamento do mês"
-                value="R$ 18.400"
+                value={(monthTotal ?? 0).toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL"
+                })}
                 subtitle="Mês atual"
                 color="emerald"
                 highlight
               />
               <MetricCard
                 label="Ticket médio"
-                value={avgValue.toString()}
+                value={(avgValue ?? 0).toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL"
+                })}
                 subtitle="Por ordem"
                 color="teal"
               />

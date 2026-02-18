@@ -29,12 +29,23 @@ export function FormEditar({ client }: FormEditarProps) {
       updatedAt: new Date(),
     };
 
-    if (await updateCliente(clientAtualizado)) {
+    try {
+      await updateCliente(clientAtualizado)
       toast.success("Usuário atualizado com sucesso!");
       router.push("/client/listar");
-    } else {
-      toast.error("Erro, tente novamente");
+    } catch (error: any) {
+
+      if(error.message === "DADOS_INVALIDOS") {
+        toast.error("Preencha todos os campos!")
+      }else if(error.message === "ERRO_AO_ATUALIZAR_CLIENTE") {
+        toast.error("Verifique os campos e tente novamente!")
+      }else {
+        toast.error("erro inesperado, tente novamente mais tarde!")
+      }
+
     }
+   
+
   }
 
   return (

@@ -8,7 +8,7 @@ import {
   UpdateServiceOrderDTO,
 } from '../types/ServiceTypes';
 import { Service as ServicePrisma } from '@prisma/client';
-import { ServiceOrderWithRelations } from '../serviceorder/listar/page';
+
 
 export async function registerService(formData: Service) {
   const serviceName = formData.name;
@@ -322,4 +322,26 @@ export async function TicketServices() {
   });
 
   return avg;
+}
+
+export async function totalMonthlyRevenue() {
+  const now = new Date();
+
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+
+  const total = await prisma.serviceOrder.aggregate({
+    _sum: {
+      price: true,
+    },
+    where: {
+      status: 'COMPLETED',
+      createdAt: {
+        gte: startOfMonth,
+        lt: endOfMonth,
+      },
+    },
+  });
+
+  return total;
 }

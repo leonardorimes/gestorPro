@@ -15,8 +15,14 @@ export function DeleteForm({ idCliente }: DeleteFormProps) {
       deleteCliente(idCliente);
       toast.success("O cliente foi deletado com sucesso!");
       router.refresh();
-    } catch (error) {
-      toast.error(`${error}`);
+    } catch (error: any) {
+      if(error.message === "CLIENTE_NAO_ENCONTRADO"){
+        toast.error("O cliente não existe")
+      }else if(error.message === "ERRO_AO_EXCLUIR_CLIENTE"){
+        toast.error("Erro ao excluir, tente novamente mais tarde!")
+      }else{
+        toast.error("Ocorreu um erro inesperado, tente novamente mais tarde!")
+      }
     }
   }
 

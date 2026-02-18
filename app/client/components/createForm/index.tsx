@@ -27,13 +27,21 @@ export default function FormCriar() {
       createdAt: new Date(),
     };
 
-    if (await registerCLient(clientCriado)) {
-      toast.success("Usuário criado com sucesso!");
-      router.push("/client/listar");
+
+    try {
+       await registerCLient(clientCriado);
+        toast.success("Usuário criado com sucesso!");
+         router.push("/client/listar");
+    } catch (error: any) {
+       if (error.message === "CLIENTE_JA_EXISTE") {
+      toast.error("Este cliente já está cadastrado.");
+    } else if (error.message === "DADOS_INVALIDOS") {
+      toast.error("Preencha todos os campos corretamente.");
     } else {
-      toast.error("Erro, tente novamente");
+      toast.error("Erro inesperado. Tente novamente.");
     }
   }
+    }
 
   return (
     <form

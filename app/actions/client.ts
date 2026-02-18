@@ -19,6 +19,7 @@ export async function registerCLient(formData: Client) {
 
   if (!clientName || !email || !pessoa || !documento) {
     throw new Error('DADOS_INVALIDOS');
+  
   }
 
   const newClient = await prisma.client.create({
@@ -84,6 +85,13 @@ export async function updateCliente(client: Client): Promise<Boolean> {
   const pessoa = client.tipo;
   const documento = client.documento;
   const id = client.id;
+
+
+    if (!clientName || !email || !pessoa || !documento) {
+    throw new Error('DADOS_INVALIDOS');
+  
+  }
+
 
   const updatedClient = await prisma.client.update({
     where: {
