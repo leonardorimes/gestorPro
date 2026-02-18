@@ -4,7 +4,6 @@ type DeleteFormProps = {
   idService: string;
 };
 
-import { deleteCliente } from "@/app/actions/client";
 import { toast } from "sonner";
 import { deleteService } from "@/app/actions/service";
 
@@ -16,8 +15,15 @@ export function DeleteForm({ idService }: DeleteFormProps) {
       deleteService(idService);
       toast.success("O Serviço foi deletado com sucesso!");
       router.refresh();
-    } catch (error) {
-      toast.error(`${error}`);
+    } catch (error: any) {
+      if(error.message === "SERVICO_NAO_ENCONTRADO"){
+        toast.error("Erro em encontrar o serviço a ser deletado!")
+      }else {
+
+        toast.error("Erro em deletar o serviço!");
+      }
+
+
     }
   }
 

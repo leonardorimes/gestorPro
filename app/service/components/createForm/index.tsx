@@ -30,12 +30,14 @@ export function FormCriar() {
     try {
       if (await registerService(ServiceCriado)) {
         toast.success('Serviço criado com sucesso!');
-        // router.push('/client/listar');
-      } else {
-        toast.error('Error tente novamente');
+        router.push('/service/listar');
       }
-    } catch (e) {
-      toast.error('Erro tente novamente');
+    } catch (error: any) {
+      if(error.message === "DADOS_INVALIDOS") {
+        toast.error("Prrencha todos os campos do formulário!")
+      }else {
+        toast.error("Erro ao criar o serviço!, tente novamente!")
+      }
     }
   }
 

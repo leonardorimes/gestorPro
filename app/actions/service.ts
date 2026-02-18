@@ -61,6 +61,10 @@ export async function updateService(service: Service) {
   const price = Number(service.price);
   const isActive = service.is_active;
 
+  if(!name || !descricao || !tipoServico || !price) {
+       throw new Error('DADOS_INVALIDOS');
+  }
+
   const serviceAtualizado = await prisma.service.update({
     where: {
       id: id,
@@ -75,7 +79,7 @@ export async function updateService(service: Service) {
   });
 
   if (!serviceAtualizado) {
-    throw new Error('Erro ao atualizar o serviço');
+    throw new Error('ERRO_AO_ATUALIZAR_SERVIÇO');
   } else {
     return true;
   }
