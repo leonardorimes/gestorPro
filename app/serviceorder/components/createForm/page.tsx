@@ -39,7 +39,6 @@ export default function FormCriar() {
   }, []);
 
   async function handleCriar(e: React.FormEvent) {
-    console.log('O id do cliente é ' + clientId);
     e.preventDefault();
 
     const newOrderService: ServiceOrder = {
@@ -55,11 +54,15 @@ export default function FormCriar() {
     };
 
     try {
-      console.log(newOrderService);
-      createOrderService(newOrderService);
-      toast.success('Criada com sucesso');
-    } catch (error) {
-      toast.error('Erro ao criar');
+      await createOrderService(newOrderService);
+      toast.success('Ordem de serviço criada com sucesso!');
+      router.push('/serviceorder/listar');
+    } catch (error: any) {
+      if(error.message === "DADOS_INVALIDOS") {
+        toast.error("Preencha todas as informações");
+      }else{
+        toast.error("Erro em cadastrar order, tente novamente mais tarde!")
+      }
     }
   }
 

@@ -16,7 +16,7 @@ export function DeleteForm({ idCliente }: DeleteFormProps) {
       toast.success("A ordem foi deletado com sucesso!");
       router.refresh();
     } catch (error) {
-      toast.error(`${error}`);
+      toast.error("erro ao deletar a service order");
     }
   }
 

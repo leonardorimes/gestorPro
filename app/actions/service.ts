@@ -150,13 +150,13 @@ export async function listAllServices(): Promise<ServicePrisma[]> {
 }
 
 export async function createOrderService(orderService: ServiceOrder) {
-  console.log(orderService);
+  console.log("essa é a ordem service+++++++++++++++++++++++++++++++++++++++++" + orderService);
   if (
     !orderService.customerId ||
     !orderService.serviceId ||
     !orderService.price
   ) {
-    throw new Error('preencha todas as inforamações');
+    throw new Error('DADOS_INVALIDOS');
   }
 
   const newOrderService = await prisma.serviceOrder.create({
@@ -224,6 +224,13 @@ export async function encontrarServiceOrder(id: string) {
 }
 
 export async function updateOrderService(order: UpdateServiceOrderDTO) {
+    if (
+    !order.customerId ||
+    !order.serviceId ||
+    !order.price
+  ) {
+    throw new Error('DADOS_INVALIDOS');
+  }
   const serviceOrder = await prisma.serviceOrder.update({
     where: { id: order.id },
     data: {

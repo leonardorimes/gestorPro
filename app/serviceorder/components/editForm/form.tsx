@@ -55,10 +55,15 @@ export default function FormEditar({ serviceOrder }: Props) {
 
     try {
       console.log(UpdateOrderService);
-      updateOrderService(UpdateOrderService);
+      await updateOrderService(UpdateOrderService);
       toast.success('Atualizada com sucesso');
-    } catch (error) {
-      toast.error('Erro ao atualizar');
+       router.push('/serviceorder/listar');
+    } catch (error: any) {
+      if(error.message === "DADOS_INVALIDOS"){
+        toast.error("PREENCHA TODAS AS INFORMAÇÕES")
+      }else{
+        toast.error("erro ao atualizar")
+      }
     }
   }
 
