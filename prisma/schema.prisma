@@ -29,6 +29,10 @@ model User {
   password  String
   createdAt DateTime @default(now())
 
+  Clients Client[]
+  services Service[]
+  orders ServiceOrder[]
+
   @@map("users")
 }
 
@@ -41,6 +45,9 @@ model Client {
   isActive   Boolean  @default(true)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+
+  userId String
+  user User @relation(fields: [userId], references: [id])
 
   serviceOrders ServiceOrder[]
 
@@ -57,6 +64,9 @@ model Service {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
   serviceOrders ServiceOrder[]
 
   @@map("services")
@@ -64,6 +74,9 @@ model Service {
 
 model ServiceOrder {
   id          String   @id @default(uuid())
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
 
   customerId  String   @map("customer_id")
   serviceId   String   @map("service_id")

@@ -12,7 +12,7 @@ export default function LoginForm() {
       const result = await loginUser(formData);
       if (result) {
         toast.success("Usuário criado com sucesso");
-        router.push("/dashboard");
+        router.push("/");
       }
     } catch (error) {
       toast.error(`${error}`);

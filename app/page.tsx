@@ -16,8 +16,19 @@ import {
   TotalPFClients,
   TotalPJClients,
 } from './actions/client';
+import { getCurrentUser } from '@/lib/auth-server';
+import { redirect } from 'next/navigation';
 
 export default async function Dashboard() {
+
+  const user = await getCurrentUser().catch(() => null)
+  try {
+    await getCurrentUser()
+    
+  } catch (error) {
+    redirect("/login")
+  }
+
   const totalOpenServices = await handleTotalOpenServices();
   const totalInprogressServices = await InProgressServices();
   const totalCompletedServices = await CompletedServices();

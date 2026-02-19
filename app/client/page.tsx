@@ -1,4 +1,4 @@
-"use client";
+
 
 import FormCriar from "@/app/client/components/createForm";
 

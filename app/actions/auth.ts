@@ -58,7 +58,7 @@ export async function loginUser(formData: FormData) {
     throw new Error("Problemas no login");
   }
 
-  const token = await encrypt(user);
+  const token = await encrypt(user.id);
 
   const cookieStore = await cookies();
   cookieStore.set("session_token", token, {
@@ -72,17 +72,16 @@ export async function loginUser(formData: FormData) {
   return true;
 }
 
-export async function encrypt(payload: any) {
-  return await new SignJWT(payload)
+export async function encrypt(userId: string) {
+  return await new SignJWT({})
     .setProtectedHeader({ alg: "HS256" })
+    .setSubject(userId)
     .setIssuedAt()
     .setExpirationTime("2h")
     .sign(secret);
 }
 
-export async function decrypt(input: string): Promise<any> {
-  const { payload } = await jwtVerify(input, secret, {
-    algorithms: ["HS256"],
-  });
+export async function decrypt(token: string) {
+  const { payload } = await jwtVerify(token, secret);
   return payload;
 }
