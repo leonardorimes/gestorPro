@@ -43,9 +43,9 @@ export default function FormCriar() {
 
     const newOrderService: ServiceOrder = {
       id: '',
-      customerId: clientId,
+      clientId: clientId,
       serviceId,
-      price: Number(preco),
+      servicePrice: Number(preco),
       status: 'OPEN',
       createdAt: new Date(),
       updatedAt: new Date(),

@@ -19,9 +19,9 @@ export type Service = {
 
 export type ServiceOrder = {
   id: string;
-  customerId: string;
+  clientId: string;
   serviceId: string;
-  price: number;
+  servicePrice: number;
   status: ServiceOrderStatus;
   startedAt: Date;
   finishedAt?: Date | null;
@@ -31,9 +31,9 @@ export type ServiceOrder = {
 
 export type UpdateServiceOrderDTO = {
   id: string;
-  customerId: string;
+  clientId: string;
   serviceId: string;
-  price: number;
+  servicePrice: number;
   status: ServiceOrderStatus;
   startedAt: Date;
   finishedAt?: Date | null;

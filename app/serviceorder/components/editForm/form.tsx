@@ -14,10 +14,10 @@ type Props = {
 };
 
 export default function FormEditar({ serviceOrder }: Props) {
-  const [preco, setPreco] = useState(serviceOrder.price);
+  const [preco, setPreco] = useState(serviceOrder.servicePrice);
   const [services, setServices] = useState<PrismaService[]>([]);
   const [serviceId, setServiceId] = useState(serviceOrder.serviceId);
-  const [clientId, setClientId] = useState(serviceOrder.customerId);
+  const [clientId, setClientId] = useState(serviceOrder.clientId);
   const [clients, setClients] = useState<PrismaClient[]>([]);
 
   const router = useRouter();
@@ -45,9 +45,9 @@ export default function FormEditar({ serviceOrder }: Props) {
     const UpdateOrderService: UpdateServiceOrderDTO = {
       ...serviceOrder,
       id: serviceOrder.id,
-      customerId: clientId,
+      clientId: clientId,
       serviceId,
-      price: Number(preco),
+      servicePrice: Number(preco),
       status: serviceOrder.status,
       startedAt: serviceOrder.startedAt,
       finishedAt: serviceOrder.finishedAt,

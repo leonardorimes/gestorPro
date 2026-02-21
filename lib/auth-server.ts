@@ -22,11 +22,11 @@ export async function getCurrentUser(){
   const { payload } = await jwtVerify(token, secret)
 
 console.log("PAYLOAD COMPLETO:", payload)
-console.log("USER ID DO PAYLOAD:", payload.id)
+console.log("USER ID DO PAYLOAD:", payload.sub)
 
 
   const user = await prisma.user.findUnique({
-    where: { id: payload.id as string }
+    where: { id: payload.sub as string }
   })
 
   console.log("este é o user ========================== " + user)

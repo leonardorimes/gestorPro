@@ -39,36 +39,41 @@ model User {
 model Client {
   id         String   @id @default(uuid())
   name       String
-  email      String   @unique
+  email      String
   tipo       TipoPessoa @default(FISICA)
-  documento  String   @unique
+  documento  String
   isActive   Boolean  @default(true)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  userId String
-  user User @relation(fields: [userId], references: [id])
+  userId     String
+  user       User @relation(fields: [userId], references: [id])
 
   serviceOrders ServiceOrder[]
 
+  @@unique([email, userId])
+  @@unique([documento, userId])
+  @@index([userId])
   @@map("clients")
 }
 
 model Service {
   id          String   @id @default(uuid())
   name        String
-  description String
+  description String?
   serviceType String   @map("service_type")
-  price       Float
-  isActive    Boolean  @map("is_active")
+  price       Decimal  @db.Decimal(10,2)
+  isActive Boolean @default(true) @map("is_active")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   userId String
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   serviceOrders ServiceOrder[]
 
+  @@unique([name, userId])
+  @@index([userId])
   @@map("services")
 }
 
@@ -76,22 +81,33 @@ model ServiceOrder {
   id          String   @id @default(uuid())
 
   userId      String
-  user        User     @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  customerId  String   @map("customer_id")
-  serviceId   String   @map("service_id")
+ clientId  String
+  client    Client   @relation(fields: [clientId], references: [id])
 
-  price       Float
-  status      ServiceOrderStatus
+  serviceId String
+  service   Service  @relation(fields: [serviceId], references: [id])
 
-  startedAt   DateTime @map("started_at")
-  finishedAt  DateTime? @map("finished_at")
+  serviceName   String
+  servicePrice  Decimal @db.Decimal(10,2)
 
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  status     ServiceOrderStatus @default(OPEN)
 
-  customer Client  @relation(fields: [customerId], references: [id])
-  service  Service @relation(fields: [serviceId], references: [id])
+  startedAt  DateTime?
+  finishedAt DateTime?
 
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+
+
+@@index([userId, status])
+@@index([userId, createdAt])
+  @@index([userId])
+  @@index([clientId])
+  @@index([serviceId])
+  @@index([status])
   @@map("service_orders")
+
 }

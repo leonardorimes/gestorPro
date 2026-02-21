@@ -2,51 +2,83 @@
 
 import { toast } from "sonner";
 import { loginUser } from "../actions/auth";
-
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginForm() {
   const router = useRouter();
+
   async function handleLogin(formData: FormData) {
     try {
       const result = await loginUser(formData);
+
       if (result) {
-        toast.success("Usuário criado com sucesso");
+        toast.success("Login realizado com sucesso!");
         router.push("/");
       }
-    } catch (error) {
-      toast.error(`${error}`);
+    } catch {
+      toast.error("Email ou senha inválidos");
     }
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-5 min-h-screen">
+    <div className="min-h-screen flex items-center justify-center px-4">
       <form
-        className="flex flex-col items-center gap-16  "
         action={handleLogin}
+        className="w-full max-w-md flex flex-col gap-16 px-6 py-16"
       >
-        <img className="w-xl" src="./logo.png" alt="" />
-        <label className="flex items-center gap-4">
-          Email:
-          <input
-            id="emailSignin"
-            type="text"
-            className="bg-gray-200 w-100 border border-[#169545] outline-none  rounded-md"
-            name="email"
-          />
-        </label>
-        <label className="flex items-center gap-4">
-          Senha:
-          <input
-            type="password"
-            className="bg-gray-200 w-100 border border-[#169545] outline-none  rounded-md"
-            name="password"
-          />
-        </label>
-        <input
-          type="submit"
-          className="bg-[#169545] w-52  text-amber-50 p-8 h-10 cursor-pointer rounded-md hover:bg-[#033816] transition-colors duration-300"
-        />
+        <div className="flex flex-col gap-3">
+          <h1 className="text-2xl font-semibold text-gray-900">
+            Entrar
+          </h1>
+          <p className="text-sm text-gray-500">
+            Acesse sua conta para continuar.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-14">
+          <div className="flex flex-col gap-3">
+            <label className="text-xs uppercase tracking-widest text-gray-400">
+              Email
+            </label>
+            <input
+              name="email"
+              type="text"
+              className="bg-transparent border-b border-gray-300 py-2.5 text-base focus:outline-none focus:border-[#169545] transition-colors"
+            />
+          </div>
+
+          <div className="flex flex-col gap-3">
+            <label className="text-xs uppercase tracking-widest text-gray-400">
+              Senha
+            </label>
+            <input
+              name="password"
+              type="password"
+              className="bg-transparent border-b border-gray-300 py-2.5 text-base focus:outline-none focus:border-[#169545] transition-colors"
+            />
+          </div>
+        </div>
+
+        <div className="pt-6 flex flex-col gap-4">
+          <button
+            type="submit"
+            className="w-full bg-[#169545] text-white py-3 text-sm font-semibold rounded-md hover:bg-[#0f7a37] transition-colors"
+          >
+            Entrar →
+          </button>
+
+          {/* Link para cadastro */}
+          <p className="text-sm text-center text-gray-500">
+            Não tem uma conta?{" "}
+            <Link
+              href="/entrar"
+              className="text-[#169545] font-semibold hover:underline"
+            >
+              Criar conta
+            </Link>
+          </p>
+        </div>
       </form>
     </div>
   );

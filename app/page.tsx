@@ -39,9 +39,9 @@ export default async function Dashboard() {
   const totalPFClients = await TotalPFClients();
   const totalPJClients = await TotalPJClients();
 
-  const totalValue = (await totalValueServices())._sum.price;
-  const avgValue = (await TicketServices())._avg.price;
-  const monthTotal = (await totalMonthlyRevenue())._sum.price
+  const totalValue = (await totalValueServices())._sum?.price ?? 0;
+  const avgValue = (await TicketServices())._avg.price ?? 0;
+  const monthTotal = (await totalMonthlyRevenue())._sum.price ?? 0;
 
  
 

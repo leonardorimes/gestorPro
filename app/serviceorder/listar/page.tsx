@@ -5,7 +5,7 @@ import { DeleteForm } from '../deleteForm';
 
 export type ServiceOrderWithRelations = Prisma.ServiceOrderGetPayload<{
   include: {
-    customer: true;
+    client: true;
     service: true;
   };
 }>;
@@ -15,9 +15,8 @@ export default async function ListarServiceOrder() {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center px-4">
-      {/* Container de leitura */}
       <div className="w-full max-w-7xl flex flex-col gap-10 py-10">
-        {/* Cabeçalho */}
+        
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-semibold text-gray-900">
             Ordens de Serviço
@@ -27,13 +26,11 @@ export default async function ListarServiceOrder() {
           </p>
         </div>
 
-        {/* Linha âncora */}
         <div className="h-px bg-gray-200" />
 
-        {/* Lista */}
         <div className="w-full overflow-x-auto">
           <table className="w-full border-collapse">
-            {/* Cabeçalho (apenas desktop) */}
+            
             <thead className="hidden sm:table-header-group">
               <tr className="border-b border-gray-200">
                 <th className="py-3 text-left text-[10px] uppercase tracking-widest text-gray-400">
@@ -64,21 +61,13 @@ export default async function ListarServiceOrder() {
               {resultado.data.map((order: ServiceOrderWithRelations) => (
                 <tr
                   key={order.id}
-                  className="
-                    block sm:table-row
-                    border border-gray-200 sm:border-0
-                    rounded-lg sm:rounded-none
-                    p-4 sm:p-0
-                    mb-4 sm:mb-0
-                    hover:bg-gray-50
-                    transition-colors
-                  "
+                  className="block sm:table-row border border-gray-200 sm:border-0 rounded-lg sm:rounded-none p-4 sm:p-0 mb-4 sm:mb-0 hover:bg-gray-50 transition-colors"
                 >
                   {/* Cliente / Serviço */}
                   <td className="block sm:table-cell py-2 sm:py-4">
                     <div className="flex flex-col gap-1">
                       <span className="text-gray-900 font-medium text-sm">
-                        {order.customer?.name}
+                        {order.client?.name}
                       </span>
                       <span className="text-gray-400 text-xs">
                         {order.service?.name}
@@ -88,9 +77,6 @@ export default async function ListarServiceOrder() {
 
                   {/* Status */}
                   <td className="block sm:table-cell py-1 sm:py-4 text-left sm:text-center">
-                    <span className="sm:hidden text-[10px] uppercase text-gray-400">
-                      Status
-                    </span>
                     <span className="text-sm font-semibold text-gray-700">
                       {order.status}
                     </span>
@@ -98,9 +84,6 @@ export default async function ListarServiceOrder() {
 
                   {/* Início */}
                   <td className="block sm:table-cell py-1 sm:py-4 text-left sm:text-center">
-                    <span className="sm:hidden text-[10px] uppercase text-gray-400">
-                      Início
-                    </span>
                     <span className="font-mono text-xs text-gray-600">
                       {order.startedAt?.toLocaleDateString('pt-BR')}
                     </span>
@@ -108,9 +91,6 @@ export default async function ListarServiceOrder() {
 
                   {/* Término */}
                   <td className="block sm:table-cell py-1 sm:py-4 text-left sm:text-center">
-                    <span className="sm:hidden text-[10px] uppercase text-gray-400">
-                      Término
-                    </span>
                     <span className="font-mono text-xs text-gray-600">
                       {order.finishedAt
                         ? order.finishedAt.toLocaleDateString('pt-BR')
@@ -120,9 +100,6 @@ export default async function ListarServiceOrder() {
 
                   {/* Atualização */}
                   <td className="block sm:table-cell py-1 sm:py-4 text-left sm:text-center">
-                    <span className="sm:hidden text-[10px] uppercase text-gray-400">
-                      Atualização
-                    </span>
                     <span className="font-mono text-xs text-gray-600">
                       {order.updatedAt.toLocaleDateString('pt-BR')}
                     </span>
@@ -130,11 +107,13 @@ export default async function ListarServiceOrder() {
 
                   {/* Preço */}
                   <td className="block sm:table-cell py-1 sm:py-4 text-left sm:text-center">
-                    <span className="sm:hidden text-[10px] uppercase text-gray-400">
-                      Preço
-                    </span>
                     <span className="text-sm font-semibold text-gray-900">
-                      {order.price}
+                      {order.servicePrice
+                        .toNumber()
+                        .toLocaleString('pt-BR', {
+                          style: 'currency',
+                          currency: 'BRL',
+                        })}
                     </span>
                   </td>
 
@@ -156,7 +135,6 @@ export default async function ListarServiceOrder() {
           </table>
         </div>
 
-        {/* Rodapé */}
         <div className="pt-6">
           <Link
             href="/"

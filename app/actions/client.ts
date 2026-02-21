@@ -2,16 +2,25 @@
 
 import { prisma } from '@/lib/prisma';
 import { Client } from '@/app/types/ClientTypes';
+import { getCurrentUser } from '@/lib/auth-server';
+
 
 export async function registerCLient(formData: Client) {
+  const user = await getCurrentUser()
   const clientName = formData.name;
   const email = formData.email;
   const pessoa = formData.tipo;
   const documento = formData.documento;
+  console.log("este é o userid ++++++++++++++++++++++++++" + user.id)
 
   const userExists = await prisma.client.findUnique({
-    where: { email: email },
-  });
+  where: {
+    email_userId: {
+      email,
+      userId: user.id
+    }
+  }
+});
 
   if (userExists) {
     throw new Error('CLIENTE_JA_EXISTE');
@@ -28,6 +37,7 @@ export async function registerCLient(formData: Client) {
       email,
       tipo: pessoa,
       documento,
+      userId: user.id
     },
   });
 
@@ -38,17 +48,23 @@ export async function registerCLient(formData: Client) {
   }
 }
 export async function listarClientePaginado(page = 1) {
+    const user = await getCurrentUser()
   const take = 10;
   const skip = (page - 1) * take;
 
   const [clients, total] = await Promise.all([
     prisma.client.findMany({
-      where: { isActive: true },
+      where: { isActive: true, userId: user.id },
       skip,
       take,
       orderBy: { createdAt: 'desc' },
     }),
-    prisma.client.count(),
+    prisma.client.count({
+    where: {
+    isActive: true,
+    userId: user.id
+  }
+}),
   ]);
 
   if (!clients) {
@@ -66,9 +82,11 @@ export async function listarClientePaginado(page = 1) {
 }
 
 export async function encontrarUnicoCliente(id: string) {
+    const user = await getCurrentUser()
   const client = await prisma.client.findUnique({
     where: {
       id: id,
+      userId: user.id
     },
   });
 
@@ -80,6 +98,7 @@ export async function encontrarUnicoCliente(id: string) {
 }
 
 export async function updateCliente(client: Client): Promise<Boolean> {
+    const user = await getCurrentUser()
   const clientName = client.name;
   const email = client.email;
   const pessoa = client.tipo;
@@ -96,6 +115,7 @@ export async function updateCliente(client: Client): Promise<Boolean> {
   const updatedClient = await prisma.client.update({
     where: {
       id: id,
+      userId: user.id
     },
     data: {
       name: clientName,
@@ -113,7 +133,8 @@ export async function updateCliente(client: Client): Promise<Boolean> {
 }
 
 export async function deleteCliente(id: string): Promise<Boolean> {
-  const client = encontrarUnicoCliente(id);
+    const user = await getCurrentUser()
+  const client = await encontrarUnicoCliente(id);
 
   if (!client) {
     throw new Error('CLIENTE_NAO_ENCONTRADO');
@@ -122,6 +143,7 @@ export async function deleteCliente(id: string): Promise<Boolean> {
   const clientExluido = await prisma.client.update({
     where: {
       id: id,
+      userId: user.id
     },
     data: {
       isActive: false,
@@ -135,8 +157,9 @@ export async function deleteCliente(id: string): Promise<Boolean> {
 }
 
 export async function listAllClients() {
+    const user = await getCurrentUser()
   const clients = await prisma.client.findMany({
-    where: { isActive: true },
+    where: { isActive: true, userId: user.id },
   });
 
   if (clients.length === 0) {
@@ -147,30 +170,38 @@ export async function listAllClients() {
 }
 
 export async function TotalClients() {
-  const numberOfClients = await prisma.serviceOrder.count();
+     const user = await getCurrentUser()
+  const numberOfClients = await prisma.client.count({
+    where: {
+        userId: user.id 
+    }
+  });
 
   return numberOfClients;
 }
 
 export async function TotalActiveClients() {
+    const user = await getCurrentUser()
   const numberOfActiveClients = await prisma.client.count({
-    where: { isActive: true },
+    where: { isActive: true, userId: user.id },
   });
 
   return numberOfActiveClients;
 }
 
 export async function TotalPFClients() {
+    const user = await getCurrentUser()
   const numberOfActiveClients = await prisma.client.count({
-    where: { tipo: 'FISICA' },
+    where: { tipo: 'FISICA', userId: user.id },
   });
 
   return numberOfActiveClients;
 }
 
 export async function TotalPJClients() {
+       const user = await getCurrentUser()
   const numberOfActiveClients = await prisma.client.count({
-    where: { tipo: 'JURIDICA' },
+    where: { tipo: 'JURIDICA', userId: user.id },
   });
 
   return numberOfActiveClients;

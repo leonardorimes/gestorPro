@@ -4,6 +4,7 @@ import type { NextRequest } from "next/server";
 export function proxy(request: NextRequest) {
     console.log("MIDDLEWARE RODANDO:", request.nextUrl.pathname)
     const token = request.cookies.get("session_token")?.value
+    console.log(token)
 
   const isProtectedRoute =
     request.nextUrl.pathname.startsWith("/client") ||

@@ -8,9 +8,12 @@ import {
   UpdateServiceOrderDTO,
 } from '../types/ServiceTypes';
 import { Service as ServicePrisma } from '@prisma/client';
+import { getCurrentUser } from '@/lib/auth-server';
+import { use } from 'react';
 
 
 export async function registerService(formData: Service) {
+  const user = await getCurrentUser()
   const serviceName = formData.name;
   const descricao = formData.description;
   const serviceType = formData.service_type;
@@ -27,6 +30,7 @@ export async function registerService(formData: Service) {
       serviceType: serviceType,
       isActive: true,
       price: Number(preco),
+      userId: user.id
     },
   });
 
@@ -40,9 +44,11 @@ export async function registerService(formData: Service) {
 export async function findOneService(
   id: string,
 ): Promise<ServicePrisma | null> {
+  const user = await getCurrentUser()
   const service = await prisma.service.findUnique({
     where: {
       id: id,
+        userId: user.id,
     },
   });
 
@@ -54,6 +60,7 @@ export async function findOneService(
 }
 
 export async function updateService(service: Service) {
+  const user = await getCurrentUser()
   const id = service.id;
   const name = service.name;
   const descricao = service.description;
@@ -68,6 +75,7 @@ export async function updateService(service: Service) {
   const serviceAtualizado = await prisma.service.update({
     where: {
       id: id,
+      userId: user.id,
     },
     data: {
       name,
@@ -88,10 +96,11 @@ export async function updateService(service: Service) {
 export async function listService(page: number) {
   const take = 10;
   const skip = (page - 1) * take;
+    const user = await getCurrentUser()
 
   const [services, total] = await Promise.all([
     prisma.service.findMany({
-      where: { isActive: true },
+      where: { isActive: true, userId: user.id, },
       skip,
       take,
       orderBy: { createdAt: 'desc' },
@@ -115,6 +124,7 @@ export async function listService(page: number) {
 
 export async function deleteService(id: string) {
   const service = findOneService(id);
+    const user = await getCurrentUser()
 
   if (!service) {
     throw new Error('SERVICO_NAO_ENCONTRADO');
@@ -123,6 +133,7 @@ export async function deleteService(id: string) {
   const serviceExcluido = await prisma.service.update({
     where: {
       id: id,
+      userId: user.id,
     },
     data: {
       isActive: false,
@@ -137,8 +148,9 @@ export async function deleteService(id: string) {
 }
 
 export async function listAllServices(): Promise<ServicePrisma[]> {
+    const user = await getCurrentUser()
   const services = await prisma.service.findMany({
-    where: { isActive: true },
+    where: { isActive: true, userId: user.id, },
   });
 
   if (services.length === 0) {
@@ -150,47 +162,57 @@ export async function listAllServices(): Promise<ServicePrisma[]> {
 }
 
 export async function createOrderService(orderService: ServiceOrder) {
-  console.log("essa é a ordem service+++++++++++++++++++++++++++++++++++++++++" + orderService);
-  if (
-    !orderService.customerId ||
-    !orderService.serviceId ||
-    !orderService.price
-  ) {
+  const user = await getCurrentUser();
+ 
+  if (!orderService.clientId || !orderService.serviceId) {
     throw new Error('DADOS_INVALIDOS');
+  }
+
+
+  const service = await prisma.service.findFirst({
+    where: {
+      id: orderService.serviceId,
+      userId: user.id,
+    },
+  });
+
+  if (!service) {
+    throw new Error('SERVICO_NAO_ENCONTRADO');
   }
 
   const newOrderService = await prisma.serviceOrder.create({
     data: {
-      customerId: orderService.customerId,
-      serviceId: orderService.serviceId,
-      price: orderService.price,
-      status: orderService.status,
-      startedAt: orderService.startedAt,
-      finishedAt: orderService.finishedAt,
-      createdAt: orderService.createdAt,
-      updatedAt: orderService.updatedAt,
+      clientId: orderService.clientId,
+      serviceId: service.id,
+
+      // 🔥 Snapshot seguro
+      serviceName: service.name,
+      servicePrice: service.price,
+
+      status: orderService.status ?? 'OPEN',
+      startedAt: orderService.startedAt ?? null,
+      finishedAt: orderService.finishedAt ?? null,
+
+      userId: user.id,
     },
   });
 
-  if (newOrderService) {
-    return true;
-  } else {
-    throw new Error('ERRO_AO_CRIAR_SERVICO');
-  }
+  return !!newOrderService;
 }
 
 export async function listarserviceOrderPaginado(page: number) {
   const take = 10;
   const skip = (page - 1) * take;
+  const user = await getCurrentUser()
 
   const [serviceOrders, total] = await Promise.all([
     prisma.serviceOrder.findMany({
-      // where: { isActive: true },
+       where: {userId: user.id},
       skip,
       take,
       orderBy: { createdAt: 'desc' },
       include: {
-        customer: true,
+        client: true,
         service: true,
       },
     }),
@@ -212,8 +234,9 @@ export async function listarserviceOrderPaginado(page: number) {
 }
 
 export async function encontrarServiceOrder(id: string) {
+    const user = await getCurrentUser()
   const serviceOrder = await prisma.serviceOrder.findUnique({
-    where: { id: id },
+    where: { id: id, userId: user.id},
   });
 
   if (!serviceOrder) {
@@ -224,38 +247,60 @@ export async function encontrarServiceOrder(id: string) {
 }
 
 export async function updateOrderService(order: UpdateServiceOrderDTO) {
-    if (
-    !order.customerId ||
-    !order.serviceId ||
-    !order.price
-  ) {
+  const user = await getCurrentUser();
+
+  if (!order.id || !order.clientId || !order.serviceId) {
     throw new Error('DADOS_INVALIDOS');
   }
-  const serviceOrder = await prisma.serviceOrder.update({
-    where: { id: order.id },
-    data: {
-      price: order.price,
-      status: order.status,
-      startedAt: order.startedAt,
-      finishedAt: order.finishedAt ?? null,
 
-      customer: {
-        connect: { id: order.customerId },
-      },
-
-      service: {
-        connect: { id: order.serviceId },
-      },
+  // 🔥 Verificar se ordem pertence ao usuário
+  const existingOrder = await prisma.serviceOrder.findFirst({
+    where: {
+      id: order.id,
+      userId: user.id,
     },
   });
 
-  return serviceOrder;
+  if (!existingOrder) {
+    throw new Error('ORDEM_NAO_ENCONTRADA');
+  }
+
+  // 🔥 Buscar serviço para snapshot atualizado
+  const service = await prisma.service.findFirst({
+    where: {
+      id: order.serviceId,
+      userId: user.id,
+    },
+  });
+
+  if (!service) {
+    throw new Error('SERVICO_NAO_ENCONTRADO');
+  }
+
+  const updatedOrder = await prisma.serviceOrder.update({
+    where: { id: order.id },
+    data: {
+      status: order.status,
+      startedAt: order.startedAt ?? null,
+      finishedAt: order.finishedAt ?? null,
+
+      // 🔥 Snapshot correto
+      serviceName: service.name,
+      servicePrice: service.price,
+
+      clientId: order.clientId,
+      serviceId: order.serviceId,
+    },
+  });
+
+  return updatedOrder;
 }
 
 export async function deleteOrder(id: string) {
+    const user = await getCurrentUser()
   const deleteOrderService = await prisma.serviceOrder.update({
     where: {
-      id: id,
+      id: id, userId: user.id
     },
     data: {
       status: 'CANCELED',
@@ -270,9 +315,11 @@ export async function deleteOrder(id: string) {
 }
 
 export async function OpenServices() {
+    const user = await getCurrentUser()
   const numberOfOpenService = await prisma.serviceOrder.count({
     where: {
       status: 'OPEN',
+      userId: user.id
     },
   });
 
@@ -280,9 +327,11 @@ export async function OpenServices() {
 }
 
 export async function InProgressServices() {
+    const user = await getCurrentUser()
   const numberOfOpenService = await prisma.serviceOrder.count({
     where: {
       status: 'IN_PROGRESS',
+      userId: user.id
     },
   });
 
@@ -290,9 +339,11 @@ export async function InProgressServices() {
 }
 
 export async function CompletedServices() {
+    const user = await getCurrentUser()
   const numberOfCompletedService = await prisma.serviceOrder.count({
     where: {
       status: 'COMPLETED',
+      userId: user.id
     },
   });
 
@@ -300,9 +351,11 @@ export async function CompletedServices() {
 }
 
 export async function CanceledServices() {
+    const user = await getCurrentUser()
   const numberOfCanceledServices = await prisma.serviceOrder.count({
     where: {
       status: 'CANCELED',
+      userId: user.id
     },
   });
 
@@ -310,25 +363,34 @@ export async function CanceledServices() {
 }
 
 export async function totalValueServices() {
-  const total = await prisma.serviceOrder.aggregate({
+    const user = await getCurrentUser()
+
+
+
+  let result  = await prisma.serviceOrder.aggregate({
     _sum: {
-      price: true,
+      servicePrice: true,
     },
     where: {
       status: 'COMPLETED',
+      userId: user.id
     },
   });
 
-  return total;
+
+
+  return result
 }
 
 export async function TicketServices() {
+    const user = await getCurrentUser()
   const avg = await prisma.serviceOrder.aggregate({
     _avg: {
-      price: true,
+      servicePrice: true,
     },
     where: {
       status: 'COMPLETED',
+      userId: user.id
     },
   });
 
@@ -336,6 +398,7 @@ export async function TicketServices() {
 }
 
 export async function totalMonthlyRevenue() {
+    const user = await getCurrentUser()
   const now = new Date();
 
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -343,10 +406,11 @@ export async function totalMonthlyRevenue() {
 
   const total = await prisma.serviceOrder.aggregate({
     _sum: {
-      price: true,
+      servicePrice: true,
     },
     where: {
       status: 'COMPLETED',
+      userId: user.id,
       createdAt: {
         gte: startOfMonth,
         lt: endOfMonth,
