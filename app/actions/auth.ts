@@ -85,3 +85,9 @@ export async function decrypt(token: string) {
   const { payload } = await jwtVerify(token, secret);
   return payload;
 }
+
+export async function logoutUser() {
+  const cookieStore = await cookies();
+  cookieStore.delete("session_token");
+  return true;
+}

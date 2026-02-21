@@ -18,6 +18,7 @@ import {
 } from './actions/client';
 import { getCurrentUser } from '@/lib/auth-server';
 import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 
 export default async function Dashboard() {
 
@@ -29,10 +30,20 @@ export default async function Dashboard() {
     redirect("/login")
   }
 
+    async function logout() {
+    "use server";
+
+    const cookieStore = await cookies();
+    cookieStore.delete("session_token");
+
+    redirect("/login");
+  }
+
   const totalOpenServices = await handleTotalOpenServices();
   const totalInprogressServices = await InProgressServices();
   const totalCompletedServices = await CompletedServices();
   const totalCanceledServices = await CanceledServices();
+
 
   const totalClients = await TotalClients();
   const totalActiveClients = await TotalActiveClients();
@@ -49,8 +60,31 @@ export default async function Dashboard() {
     <div className="min-h-screen w-full bg-gray-100">
       {/* Header fixo */}
       <div className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-[1400px] mx-auto px-6 py-4">
+        <div className="max-w-[1400px] mx-auto px-6 py-4 flex items-center justify-between ">
           <h1 className="text-2xl font-bold text-[#169545]">GESTORPRO</h1>
+                    <div className="flex items-center gap-6">
+            <span className="text-sm text-gray-600 hidden sm:block">
+              Olá, {user ? user.username: ""}
+            </span>
+
+            <form action={logout}>
+              <button
+                type="submit"
+                className="
+                  px-4 py-2
+                  text-sm font-semibold
+                  text-white
+                  bg-red-500
+                  rounded-lg
+                  hover:bg-red-600
+                  transition-colors
+                  cursor-pointer
+                "
+              >
+                Sair
+              </button>
+            </form>
+          </div>
         </div>
       </div>
 
