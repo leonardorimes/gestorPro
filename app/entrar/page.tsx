@@ -37,7 +37,7 @@ export default function EntrarForm() {
           <h1 className="text-2xl font-semibold text-gray-900">
             Criar conta
           </h1>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-600">
             Preencha os dados para se cadastrar.
           </p>
         </div>
@@ -47,7 +47,7 @@ export default function EntrarForm() {
           
           {/* Email */}
           <div className="flex flex-col gap-3">
-            <label className="text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-xs uppercase tracking-widest text-gray-500">
               Email
             </label>
             <input
@@ -55,7 +55,7 @@ export default function EntrarForm() {
               type="text"
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2.5
                 text-base
                 focus:outline-none
@@ -67,7 +67,7 @@ export default function EntrarForm() {
 
           {/* Usuário */}
           <div className="flex flex-col gap-3">
-            <label className="text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-xs uppercase tracking-widest text-gray-500">
               Usuário
             </label>
             <input
@@ -75,7 +75,7 @@ export default function EntrarForm() {
               type="text"
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2.5
                 text-base
                 focus:outline-none
@@ -87,7 +87,7 @@ export default function EntrarForm() {
 
           {/* Senha */}
           <div className="flex flex-col gap-3">
-            <label className="text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-xs uppercase tracking-widest text-gray-500">
               Senha
             </label>
             <input
@@ -95,7 +95,7 @@ export default function EntrarForm() {
               type="password"
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2.5
                 text-base
                 focus:outline-none

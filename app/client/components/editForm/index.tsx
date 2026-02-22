@@ -67,7 +67,7 @@ export function FormEditar({ client }: FormEditarProps) {
           <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
             Editar cliente
           </h1>
-          <p className="text-sm text-gray-500 leading-relaxed">
+          <p className="text-sm text-gray-600 leading-relaxed">
             Atualize as informações do cliente abaixo.
           </p>
         </div>
@@ -75,7 +75,7 @@ export function FormEditar({ client }: FormEditarProps) {
         {/* Campos */}
         <div className="flex flex-col gap-10 sm:gap-14">
           <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500">
               Nome
             </label>
             <input
@@ -83,7 +83,7 @@ export function FormEditar({ client }: FormEditarProps) {
               onChange={(e) => setName(e.target.value)}
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2 sm:py-2.5
                 text-base
                 focus:outline-none
@@ -94,7 +94,7 @@ export function FormEditar({ client }: FormEditarProps) {
           </div>
 
           <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500">
               Email
             </label>
             <input
@@ -102,7 +102,7 @@ export function FormEditar({ client }: FormEditarProps) {
               onChange={(e) => setEmail(e.target.value)}
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2 sm:py-2.5
                 text-base
                 focus:outline-none
@@ -113,7 +113,7 @@ export function FormEditar({ client }: FormEditarProps) {
           </div>
 
           <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500">
               Tipo de pessoa
             </label>
             <select
@@ -121,7 +121,7 @@ export function FormEditar({ client }: FormEditarProps) {
               onChange={(e) => setTipo(e.target.value as Client["tipo"])}
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2 sm:py-2.5
                 text-base
                 focus:outline-none
@@ -135,7 +135,7 @@ export function FormEditar({ client }: FormEditarProps) {
           </div>
 
           <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500">
               Documento
             </label>
             <input
@@ -143,7 +143,7 @@ export function FormEditar({ client }: FormEditarProps) {
               onChange={(e) => setDocumento(e.target.value)}
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2 sm:py-2.5
                 text-base
                 focus:outline-none

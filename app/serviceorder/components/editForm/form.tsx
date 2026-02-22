@@ -84,7 +84,7 @@ export default function FormEditar({ serviceOrder }: Props) {
           <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
             Editar ordem de serviço
           </h1>
-          <p className="text-sm text-gray-500 leading-relaxed">
+          <p className="text-sm text-gray-600 leading-relaxed">
             Atualize o cliente, o serviço e o valor da ordem.
           </p>
         </div>
@@ -93,7 +93,7 @@ export default function FormEditar({ serviceOrder }: Props) {
         <div className="flex flex-col gap-10 sm:gap-14">
           {/* Cliente */}
           <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500">
               Cliente
             </label>
             <select
@@ -101,7 +101,7 @@ export default function FormEditar({ serviceOrder }: Props) {
               onChange={(e) => setClientId(e.target.value)}
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2 sm:py-2.5
                 text-base
                 focus:outline-none
@@ -120,7 +120,7 @@ export default function FormEditar({ serviceOrder }: Props) {
 
           {/* Serviço */}
           <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500">
               Serviço
             </label>
             <select
@@ -128,7 +128,7 @@ export default function FormEditar({ serviceOrder }: Props) {
               onChange={(e) => setServiceId(e.target.value)}
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2 sm:py-2.5
                 text-base
                 focus:outline-none
@@ -147,7 +147,7 @@ export default function FormEditar({ serviceOrder }: Props) {
 
           {/* Preço */}
           <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500">
               Preço
             </label>
             <input
@@ -156,7 +156,7 @@ export default function FormEditar({ serviceOrder }: Props) {
               placeholder="0,00"
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2 sm:py-2.5
                 text-base
                 focus:outline-none

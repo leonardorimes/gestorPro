@@ -58,14 +58,14 @@ export function MetricCard({
       `}
     >
       <div className="flex items-center justify-between">
-        <span className="text-xs uppercase tracking-wider font-semibold text-gray-600">
+        <span className="text-xs uppercase tracking-wider font-semibold text-gray-700">
           {label}
         </span>
         <div className={`w-3 h-3 rounded-full ${colors.dot}`}></div>
       </div>
       <div>
         <p className="text-3xl font-bold text-gray-900 mb-2">{value}</p>
-        <p className="text-sm text-gray-600 font-medium">{subtitle}</p>
+        <p className="text-sm text-gray-700 font-medium">{subtitle}</p>
       </div>
     </div>
   );

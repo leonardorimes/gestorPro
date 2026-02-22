@@ -31,31 +31,31 @@ export default function LoginForm() {
           <h1 className="text-2xl font-semibold text-gray-900">
             Entrar
           </h1>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-600">
             Acesse sua conta para continuar.
           </p>
         </div>
 
         <div className="flex flex-col gap-14">
           <div className="flex flex-col gap-3">
-            <label className="text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-xs uppercase tracking-widest text-gray-500">
               Email
             </label>
             <input
               name="email"
               type="text"
-              className="bg-transparent border-b border-gray-300 py-2.5 text-base focus:outline-none focus:border-[#169545] transition-colors"
+              className="bg-transparent border-b border-gray-400 py-2.5 text-base focus:outline-none focus:border-[#169545] transition-colors"
             />
           </div>
 
           <div className="flex flex-col gap-3">
-            <label className="text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-xs uppercase tracking-widest text-gray-500">
               Senha
             </label>
             <input
               name="password"
               type="password"
-              className="bg-transparent border-b border-gray-300 py-2.5 text-base focus:outline-none focus:border-[#169545] transition-colors"
+              className="bg-transparent border-b border-gray-400 py-2.5 text-base focus:outline-none focus:border-[#169545] transition-colors"
             />
           </div>
         </div>
@@ -69,7 +69,7 @@ export default function LoginForm() {
           </button>
 
           {/* Link para cadastro */}
-          <p className="text-sm text-center text-gray-500">
+          <p className="text-sm text-center text-gray-600">
             Não tem uma conta?{" "}
             <Link
               href="/entrar"

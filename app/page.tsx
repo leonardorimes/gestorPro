@@ -59,11 +59,11 @@ export default async function Dashboard() {
   return (
     <div className="min-h-screen w-full bg-gray-100">
       {/* Header fixo */}
-      <div className="bg-white border-b border-gray-200 shadow-sm">
+      <div className="bg-white border-b border-gray-400 shadow-sm">
         <div className="max-w-[1400px] mx-auto px-6 py-4 flex items-center justify-between ">
           <h1 className="text-2xl font-bold text-[#169545]">GESTORPRO</h1>
                     <div className="flex items-center gap-6">
-            <span className="text-sm text-gray-600 hidden sm:block">
+            <span className="text-sm text-gray-700 hidden sm:block">
               Olá, {user ? user.username: ""}
             </span>
 
@@ -96,7 +96,7 @@ export default async function Dashboard() {
             <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900">
               Dashboard
             </h2>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-700">
               Visão geral do sistema e ações rápidas.
             </p>
           </div>
@@ -216,7 +216,7 @@ export default async function Dashboard() {
               </div>
 
               {/* Gráfico de pizza */}
-              <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-6 flex flex-col">
+              <div className="bg-white rounded-2xl shadow-md border border-gray-400 p-6 flex flex-col">
                 <h4 className="text-base font-semibold text-gray-900 mb-6">
                   Distribuição por tipo
                 </h4>
@@ -227,14 +227,14 @@ export default async function Dashboard() {
                   <div className="text-center">
                     <div className="flex items-center justify-center gap-2 mb-1">
                       <div className="w-3 h-3 rounded-full bg-[#169545]"></div>
-                      <span className="text-xs font-medium text-gray-600">
+                      <span className="text-xs font-medium text-gray-700">
                         Pessoa Física
                       </span>
                     </div>
                     <p className="text-2xl font-bold text-gray-900">
                       {totalPFClients}
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-gray-600 mt-1">
                       {(totalPFClients / (totalPJClients + totalPFClients)) *
                         100}
                       %
@@ -243,14 +243,14 @@ export default async function Dashboard() {
                   <div className="text-center">
                     <div className="flex items-center justify-center gap-2 mb-1">
                       <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                      <span className="text-xs font-medium text-gray-600">
+                      <span className="text-xs font-medium text-gray-700">
                         Pessoa Jurídica
                       </span>
                     </div>
                     <p className="text-2xl font-bold text-gray-900">
                       {totalPJClients}
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-gray-600 mt-1">
                       {' '}
                       {(totalPJClients / (totalPJClients + totalPFClients)) *
                         100}
@@ -316,10 +316,10 @@ function ActionCard({
   actions: { label: string; href: string; primary?: boolean }[];
 }) {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white shadow-md p-6 flex flex-col gap-4 hover:shadow-lg transition-shadow">
+    <div className="rounded-2xl border border-gray-400 bg-white shadow-md p-6 flex flex-col gap-4 hover:shadow-lg transition-shadow">
       <div className="flex flex-col gap-1">
         <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-        <p className="text-sm text-gray-600">{description}</p>
+        <p className="text-sm text-gray-700">{description}</p>
       </div>
 
       <div className="flex flex-col gap-3 mt-2">
@@ -333,7 +333,7 @@ function ActionCard({
               ${
                 action.primary
                   ? 'bg-[#169545] text-white hover:bg-[#147a3a] shadow-sm'
-                  : 'border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400'
+                  : 'border-2 border-gray-400 text-gray-700 hover:bg-gray-50 hover:border-gray-400'
               }
             `}
           >

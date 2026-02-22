@@ -21,7 +21,7 @@ export default async function ListarServiceOrder() {
           <h1 className="text-2xl font-semibold text-gray-900">
             Ordens de Serviço
           </h1>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-700">
             Acompanhe as ordens de serviço criadas no sistema.
           </p>
         </div>
@@ -32,36 +32,36 @@ export default async function ListarServiceOrder() {
           <table className="w-full border-collapse">
             
             <thead className="hidden sm:table-header-group">
-              <tr className="border-b border-gray-200">
-                <th className="py-3 text-left text-[10px] uppercase tracking-widest text-gray-400">
+              <tr className="border-b border-gray-300">
+                <th className="py-3 text-left text-[10px] uppercase tracking-widest text-gray-700">
                   Cliente / Serviço
                 </th>
-                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-400">
+                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-700">
                   Status
                 </th>
-                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-400">
+                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-700">
                   Início
                 </th>
-                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-400">
+                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-700">
                   Término
                 </th>
-                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-400">
+                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-700">
                   Atualização
                 </th>
-                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-400">
+                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-700">
                   Preço
                 </th>
-                <th className="py-3 text-right text-[10px] uppercase tracking-widest text-gray-400">
+                <th className="py-3 text-right text-[10px] uppercase tracking-widest text-gray-700">
                   Ações
                 </th>
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-gray-200">
               {resultado.data.map((order: ServiceOrderWithRelations) => (
                 <tr
                   key={order.id}
-                  className="block sm:table-row border border-gray-200 sm:border-0 rounded-lg sm:rounded-none p-4 sm:p-0 mb-4 sm:mb-0 hover:bg-gray-50 transition-colors"
+                  className="block sm:table-row border border-gray-300 sm:border-0 rounded-lg sm:rounded-none p-4 sm:p-0 mb-4 sm:mb-0 hover:bg-gray-100 transition-colors"
                 >
                   {/* Cliente / Serviço */}
                   <td className="block sm:table-cell py-2 sm:py-4">
@@ -69,7 +69,7 @@ export default async function ListarServiceOrder() {
                       <span className="text-gray-900 font-medium text-sm">
                         {order.client?.name}
                       </span>
-                      <span className="text-gray-400 text-xs">
+                      <span className="text-gray-700 text-xs">
                         {order.service?.name}
                       </span>
                     </div>
@@ -84,14 +84,14 @@ export default async function ListarServiceOrder() {
 
                   {/* Início */}
                   <td className="block sm:table-cell py-1 sm:py-4 text-left sm:text-center">
-                    <span className="font-mono text-xs text-gray-600">
+                    <span className="font-mono text-xs text-gray-700">
                       {order.startedAt?.toLocaleDateString('pt-BR')}
                     </span>
                   </td>
 
                   {/* Término */}
                   <td className="block sm:table-cell py-1 sm:py-4 text-left sm:text-center">
-                    <span className="font-mono text-xs text-gray-600">
+                    <span className="font-mono text-xs text-gray-700">
                       {order.finishedAt
                         ? order.finishedAt.toLocaleDateString('pt-BR')
                         : 'Não finalizada'}
@@ -100,7 +100,7 @@ export default async function ListarServiceOrder() {
 
                   {/* Atualização */}
                   <td className="block sm:table-cell py-1 sm:py-4 text-left sm:text-center">
-                    <span className="font-mono text-xs text-gray-600">
+                    <span className="font-mono text-xs text-gray-700">
                       {order.updatedAt.toLocaleDateString('pt-BR')}
                     </span>
                   </td>
@@ -138,7 +138,7 @@ export default async function ListarServiceOrder() {
         <div className="pt-6">
           <Link
             href="/"
-            className="text-xs uppercase tracking-widest text-gray-400 hover:text-[#169545]"
+            className="text-xs uppercase tracking-widest text-gray-700 hover:text-[#169545]"
           >
             ← Voltar ao início
           </Link>

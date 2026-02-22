@@ -61,7 +61,7 @@ export function FormEditar({ service }: FormEditarProps) {
           <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
             Editar serviço
           </h1>
-          <p className="text-sm text-gray-500 leading-relaxed">
+          <p className="text-sm text-gray-600 leading-relaxed">
             Atualize as informações do serviço.
           </p>
         </div>
@@ -70,7 +70,7 @@ export function FormEditar({ service }: FormEditarProps) {
         <div className="flex flex-col gap-10 sm:gap-14">
           {/* Nome */}
           <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500">
               Nome do serviço
             </label>
             <input
@@ -78,7 +78,7 @@ export function FormEditar({ service }: FormEditarProps) {
               onChange={(e) => setName(e.target.value)}
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2 sm:py-2.5
                 text-base
                 focus:outline-none
@@ -90,7 +90,7 @@ export function FormEditar({ service }: FormEditarProps) {
 
           {/* Descrição */}
           <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500">
               Descrição
             </label>
             <input
@@ -98,7 +98,7 @@ export function FormEditar({ service }: FormEditarProps) {
               onChange={(e) => setDescription(e.target.value)}
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2 sm:py-2.5
                 text-base
                 focus:outline-none
@@ -110,7 +110,7 @@ export function FormEditar({ service }: FormEditarProps) {
 
           {/* Tipo */}
           <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500">
               Tipo do serviço
             </label>
             <select
@@ -120,7 +120,7 @@ export function FormEditar({ service }: FormEditarProps) {
               }
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2 sm:py-2.5
                 text-base
                 focus:outline-none
@@ -138,7 +138,7 @@ export function FormEditar({ service }: FormEditarProps) {
 
           {/* Preço */}
           <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500">
               Preço
             </label>
             <input
@@ -146,7 +146,7 @@ export function FormEditar({ service }: FormEditarProps) {
               onChange={(e) => setPreco(e.target.value)}
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2 sm:py-2.5
                 text-base
                 focus:outline-none

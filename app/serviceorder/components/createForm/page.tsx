@@ -83,7 +83,7 @@ export default function FormCriar() {
           <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
             Nova ordem de serviço
           </h1>
-          <p className="text-sm text-gray-500 leading-relaxed">
+          <p className="text-sm text-gray-600 leading-relaxed">
             Selecione o cliente, o serviço e defina o valor.
           </p>
         </div>
@@ -92,7 +92,7 @@ export default function FormCriar() {
         <div className="flex flex-col gap-10 sm:gap-14">
           {/* Cliente */}
           <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500">
               Cliente
             </label>
             <select
@@ -100,7 +100,7 @@ export default function FormCriar() {
               onChange={(e) => setClientId(e.target.value)}
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2 sm:py-2.5
                 text-base
                 focus:outline-none
@@ -119,7 +119,7 @@ export default function FormCriar() {
 
           {/* Serviço */}
           <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500">
               Serviço
             </label>
             <select
@@ -127,7 +127,7 @@ export default function FormCriar() {
               onChange={(e) => setServiceId(e.target.value)}
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2 sm:py-2.5
                 text-base
                 focus:outline-none
@@ -146,7 +146,7 @@ export default function FormCriar() {
 
           {/* Preço */}
           <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500">
               Preço
             </label>
             <input
@@ -155,7 +155,7 @@ export default function FormCriar() {
               placeholder="0,00"
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2 sm:py-2.5
                 text-base
                 focus:outline-none

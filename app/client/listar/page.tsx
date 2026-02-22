@@ -13,7 +13,7 @@ export default async function ListarClientes() {
         {/* Cabeçalho */}
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-semibold text-gray-900">Clientes</h1>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-700">
             Lista de clientes cadastrados no sistema.
           </p>
         </div>
@@ -25,30 +25,30 @@ export default async function ListarClientes() {
         <div className="w-full overflow-x-auto">
           <table className="w-full border-collapse">
             <thead className="hidden sm:table-header-group">
-              <tr className="border-b border-gray-200">
-                <th className="py-3 text-left text-[10px] uppercase tracking-widest text-gray-400">
+              <tr className="border-b border-gray-300">
+                <th className="py-3 text-left text-[10px] uppercase tracking-widest text-gray-700">
                   Cliente
                 </th>
-                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-400">
+                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-700">
                   Tipo
                 </th>
-                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-400">
+                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-700">
                   Documento
                 </th>
-                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-400">
+                <th className="py-3 text-center text-[10px] uppercase tracking-widest text-gray-700">
                   Status
                 </th>
-                <th className="py-3 text-right text-[10px] uppercase tracking-widest text-gray-400">
+                <th className="py-3 text-right text-[10px] uppercase tracking-widest text-gray-700">
                   Ações
                 </th>
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-gray-200">
               {resultado.data.map((cliente: Client) => (
                 <tr
                   key={cliente.id}
-                  className="hover:bg-gray-50 transition-colors"
+                  className="hover:bg-gray-100 transition-colors"
                 >
                   {/* Cliente */}
                   <td className="py-4">
@@ -56,19 +56,19 @@ export default async function ListarClientes() {
                       <span className="text-gray-900 font-medium text-sm">
                         {cliente.name}
                       </span>
-                      <span className="text-gray-400 text-xs">
+                      <span className="text-gray-700 text-xs">
                         {cliente.email}
                       </span>
                     </div>
                   </td>
 
                   {/* Tipo */}
-                  <td className="py-4 text-center text-sm text-gray-600">
+                  <td className="py-4 text-center text-sm text-gray-700">
                     {cliente.tipo}
                   </td>
 
                   {/* Documento */}
-                  <td className="py-4 text-center font-mono text-xs text-gray-500">
+                  <td className="py-4 text-center font-mono text-xs text-gray-700">
                     {cliente.documento}
                   </td>
 
@@ -105,7 +105,7 @@ export default async function ListarClientes() {
         <div className="pt-6">
           <Link
             href="/"
-            className="text-xs uppercase tracking-widest text-gray-400 hover:text-[#169545]"
+            className="text-xs uppercase tracking-widest text-gray-700 hover:text-[#169545]"
           >
             ← Voltar ao início
           </Link>

@@ -58,7 +58,7 @@ export function FormCriar() {
           <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">
             Novo serviço
           </h1>
-          <p className="text-sm text-gray-500 leading-relaxed">
+          <p className="text-sm text-gray-600 leading-relaxed">
             Cadastre um novo serviço disponível no sistema.
           </p>
         </div>
@@ -67,7 +67,7 @@ export function FormCriar() {
         <div className="flex flex-col gap-10 sm:gap-14">
           {/* Nome */}
           <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500">
               Nome do serviço
             </label>
             <input
@@ -76,7 +76,7 @@ export function FormCriar() {
               placeholder="Ex: Desenvolvimento de site"
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2 sm:py-2.5
                 text-base
                 focus:outline-none
@@ -88,7 +88,7 @@ export function FormCriar() {
 
           {/* Descrição */}
           <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500">
               Descrição
             </label>
             <input
@@ -97,7 +97,7 @@ export function FormCriar() {
               placeholder="Descrição breve do serviço"
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2 sm:py-2.5
                 text-base
                 focus:outline-none
@@ -109,7 +109,7 @@ export function FormCriar() {
 
           {/* Tipo */}
           <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500">
               Tipo do serviço
             </label>
             <select
@@ -119,7 +119,7 @@ export function FormCriar() {
               }
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2 sm:py-2.5
                 text-base
                 focus:outline-none
@@ -137,7 +137,7 @@ export function FormCriar() {
 
           {/* Preço */}
           <div className="flex flex-col gap-2 sm:gap-3 pl-3 sm:pl-0">
-            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-400">
+            <label className="text-[10px] sm:text-xs uppercase tracking-widest text-gray-500">
               Preço
             </label>
             <input
@@ -146,7 +146,7 @@ export function FormCriar() {
               placeholder="0,00"
               className="
                 bg-transparent
-                border-b border-gray-300
+                border-b border-gray-400
                 py-2 sm:py-2.5
                 text-base
                 focus:outline-none
