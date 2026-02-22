@@ -12,7 +12,7 @@ type FormEditarProps = {
 
 export function FormEditar({ service }: FormEditarProps) {
   const [name, setName] = useState(service.name);
-  const [description, setDescription] = useState(service.description);
+  const [description, setDescription] = useState(service.description ?? "");
   const [tipo, setTipo] = useState<Service["service_type"]>(
     service.service_type
   );
@@ -94,7 +94,7 @@ export function FormEditar({ service }: FormEditarProps) {
               Descrição
             </label>
             <input
-              value={description}
+              value={description ?? ""}
               onChange={(e) => setDescription(e.target.value)}
               className="
                 bg-transparent

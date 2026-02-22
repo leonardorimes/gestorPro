@@ -2,7 +2,8 @@ import FormEditar from '@/app/serviceorder/components/editForm/form';
 
 
 import { encontrarServiceOrder } from '@/app/actions/service';
-import { Prisma } from '@prisma/client';
+import { UpdateServiceOrderDTO } from '@/app/types/ServiceTypes';
+
 
 export default async function PageClient({
   params,
@@ -13,6 +14,11 @@ export default async function PageClient({
 
   const serviceOrder = await encontrarServiceOrder(id);
 
+  const serviceOrderFormatted: UpdateServiceOrderDTO = {
+  ...serviceOrder,
+  servicePrice: serviceOrder.servicePrice.toNumber(),
+};
+
   if (!serviceOrder) {
     throw new Error('Service Order não encontrado ');
   }
@@ -21,7 +27,7 @@ export default async function PageClient({
     <div className="flex flex-col items-center justify-center gap-5 min-h-screen">
 
 
-      <FormEditar serviceOrder={serviceOrder} />
+      <FormEditar serviceOrder={serviceOrderFormatted} />
     </div>
   );
 }

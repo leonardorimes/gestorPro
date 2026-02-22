@@ -9,7 +9,7 @@ export type TipoServico =
 export type Service = {
   id: string;
   name: string;
-  description: string;
+  description: string | null;
   service_type: TipoServico;
   price: number;
   is_active: boolean;
@@ -35,6 +35,6 @@ export type UpdateServiceOrderDTO = {
   serviceId: string;
   servicePrice: number;
   status: ServiceOrderStatus;
-  startedAt: Date;
+  startedAt: Date | null;
   finishedAt?: Date | null;
 };

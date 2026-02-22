@@ -2,7 +2,7 @@
 
 import { FormEditar } from '../../components/editForm';
 import { findOneService } from "@/app/actions/service";
-import { Service } from "@/app/types/ServiceTypes";
+import { Service, TipoServico } from "@/app/types/ServiceTypes";
 
 export default async function PageClient({
   params,
@@ -23,10 +23,10 @@ export default async function PageClient({
   const clienteAtualizar: Service = {
   id: service.id,
   name: service.name,
-  description: service.description,
-  service_type: service.service_type,
-  price: service.price,
-  is_active: service.is_active,
+  description: service.description ?? "",
+  service_type: service.serviceType as TipoServico,
+  price: service.price.toNumber(),
+  is_active: service.isActive,
   createdAt: service.createdAt,
   updatedAt: new Date(),
   };
